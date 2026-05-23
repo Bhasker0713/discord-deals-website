@@ -3,516 +3,508 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Community Clearances — Daily Deals</title>
-  <meta name="description" content="The best clearance deals and discounts from Amazon, Walmart, Target and more, curated daily." />
+  <title>Dollar Saver — Best Deals Today</title>
+  <meta name="description" content="Free and cheap deals from Home Depot, Menards, Gap, Old Navy, Chick-fil-A, Starbucks and more." />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:       #f4f3f0;
+      --green:    #1d7a45;
+      --green-lt: #eaf5ef;
+      --red:      #c92000;
+      --red-lt:   #fff1ee;
+      --gold:     #f5a623;
+      --bg:       #f5f4f0;
       --surface:  #ffffff;
-      --border:   #e8e6e1;
-      --text:     #1a1a18;
-      --muted:    #888680;
-      --accent:   #e8470a;
+      --border:   #e6e3dc;
+      --text:     #1b1b18;
+      --muted:    #86837c;
       --radius:   10px;
     }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); }
 
-    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-    /* ── Header ── */
+    /* Header */
     header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 56px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      background: var(--green); height: 54px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 1.5rem; position: sticky; top: 0; z-index: 100;
     }
-    .logo { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .logo span { color: var(--accent); }
-    .header-right { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-
-    /* ── Filter bar ── */
-    .filterbar {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      height: 46px;
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-text { font-size: 1.25rem; font-weight: 800; color: #fff; letter-spacing: -0.03em; }
+    .logo-pill {
+      font-size: 10px; font-weight: 800; background: var(--gold);
+      color: #3a1f00; padding: 3px 8px; border-radius: 20px; letter-spacing: 0.05em;
     }
-    .filterbar::-webkit-scrollbar { display: none; }
-    .filter-btn {
-      white-space: nowrap;
-      padding: 5px 13px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 500;
-      border: 1px solid transparent;
-      background: transparent;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.12s;
-      flex-shrink: 0;
+    .header-right { font-size: 11px; color: rgba(255,255,255,0.6); }
+
+    /* Category bar */
+    .catbar {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 2px;
+      padding: 0 1rem; overflow-x: auto; scrollbar-width: none; height: 50px;
     }
-    .filter-btn:hover { color: var(--text); background: var(--bg); }
-    .filter-btn.active { background: var(--text); color: white; }
-
-    .divider { width: 1px; height: 18px; background: var(--border); flex-shrink: 0; margin: 0 4px; }
-
-    /* ── Store pill filters ── */
-    .store-btn {
-      white-space: nowrap;
-      padding: 4px 11px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.12s;
-      flex-shrink: 0;
+    .catbar::-webkit-scrollbar { display: none; }
+    .cat-btn {
+      flex-shrink: 0; padding: 6px 16px; border-radius: 20px; font-size: 13px;
+      font-weight: 600; border: none; background: transparent; color: var(--muted);
+      cursor: pointer; white-space: nowrap; transition: all 0.12s;
     }
-    .store-btn:hover { border-color: #aaa; color: var(--text); }
-    .store-btn.active { border-color: var(--text); color: var(--text); background: #f0ede8; }
+    .cat-btn:hover { background: var(--bg); color: var(--text); }
+    .cat-btn.active { background: var(--green); color: #fff; }
 
-    /* ── Main grid ── */
-    .container { max-width: 1280px; margin: 0 auto; padding: 1.5rem; }
-
-    .stats-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
+    /* Store pills */
+    .storebar {
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 1.25rem; overflow-x: auto; scrollbar-width: none;
     }
-    .stats-bar .count { font-size: 13px; color: var(--muted); }
-    .refresh-btn {
-      font-size: 12px;
-      color: var(--muted);
-      background: none;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 8px;
-      border-radius: 6px;
+    .storebar::-webkit-scrollbar { display: none; }
+    .store-pill {
+      flex-shrink: 0; padding: 4px 13px; border-radius: 20px; font-size: 12px;
+      font-weight: 600; border: 1.5px solid var(--border); background: var(--surface);
+      color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.12s;
     }
-    .refresh-btn:hover { background: var(--border); color: var(--text); }
+    .store-pill:hover { color: var(--text); border-color: #bbb; }
+    .store-pill.active { border-color: var(--green); color: var(--green); background: var(--green-lt); }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-      gap: 14px;
+    /* Container */
+    .container { max-width: 1280px; margin: 0 auto; padding: 1.25rem 1.5rem; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .count { font-size: 13px; color: var(--muted); }
+    .refresh {
+      font-size: 12px; color: var(--muted); background: none;
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: 4px 10px; cursor: pointer; display: flex; align-items: center; gap: 5px;
     }
+    .refresh:hover { border-color: #aaa; color: var(--text); }
 
-    /* ── Deal card ── */
+    /* Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+
+    /* Card */
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: border-color 0.15s, transform 0.1s;
-      text-decoration: none;
-      color: inherit;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .card:hover { border-color: #ccc; transform: translateY(-1px); }
+    .card:hover { border-color: #c8c5be; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
 
-    .card-img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      background: var(--bg);
-      display: block;
-      flex-shrink: 0;
+    .img-wrap { position: relative; flex-shrink: 0; }
+    .card-img { width: 100%; height: 150px; object-fit: cover; display: block; background: var(--bg); }
+    .img-placeholder {
+      width: 100%; height: 150px; background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
     }
-    .card-img-placeholder {
-      width: 100%;
-      height: 150px;
-      background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+    .store-initial { font-size: 26px; font-weight: 900; opacity: 0.15; letter-spacing: -0.04em; text-transform: uppercase; }
+
+    .badge-free {
+      position: absolute; top: 8px; left: 8px;
+      background: var(--gold); color: #3a1f00;
+      font-size: 10px; font-weight: 800; padding: 3px 9px;
+      border-radius: 20px; letter-spacing: 0.05em;
     }
-    .store-icon {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      opacity: 0.18;
+    .badge-hot {
+      position: absolute; top: 8px; left: 8px;
+      background: var(--red); color: #fff;
+      font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+    }
+    .badge-off {
+      position: absolute; top: 8px; right: 8px;
+      background: var(--surface); color: var(--red);
+      font-size: 11px; font-weight: 700; padding: 3px 8px;
+      border-radius: 6px; border: 1px solid var(--border);
     }
 
-    .card-body { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; gap: 7px; }
+    .body { padding: 11px 13px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
 
-    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-
-    .store-badge {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      padding: 2px 7px;
-      border-radius: 20px;
-      text-transform: uppercase;
-      flex-shrink: 0;
+    .body-top { display: flex; align-items: center; justify-content: space-between; }
+    .sbadge {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.03em;
+      padding: 2px 8px; border-radius: 20px; text-transform: uppercase; flex-shrink: 0;
     }
-    /* Store colors */
-    .store-Amazon    { background: #fff4d6; color: #a35c00; }
-    .store-Walmart   { background: #e8f4ff; color: #0058a3; }
-    .store-Target    { background: #ffe8e8; color: #cc0000; }
-    .store-BestBuy   { background: #e8e8ff; color: #1b0bab; }
-    .store-Costco    { background: #e8f0e8; color: #005c30; }
-    .store-eBay      { background: #fff0e0; color: #e53238; }
-    .store-Newegg    { background: #fff0e8; color: #d14316; }
-    .store-Nike      { background: #f0f0f0; color: #111; }
-    .store-Other     { background: #f2f0ec; color: #666; }
+    /* Store badge colours */
+    .s-homedepot { background: #fff3e0; color: #bf5000; }
+    .s-menards   { background: #e8f5e8; color: #1a6020; }
+    .s-lowes     { background: #e0ecff; color: #0044a8; }
+    .s-gap       { background: #eeeefd; color: #2222aa; }
+    .s-oldnavy   { background: #ffeef8; color: #990066; }
+    .s-kohls     { background: #fff0e0; color: #994400; }
+    .s-chickfila { background: #fff5e0; color: #b05c00; }
+    .s-starbucks { background: #e0f5ea; color: #00623a; }
+    .s-mcdonalds { background: #fffae0; color: #aa7700; }
+    .s-amazon    { background: #fff4d4; color: #a05000; }
+    .s-bestbuy   { background: #e8e8ff; color: #1515aa; }
+    .s-target    { background: #ffe8e8; color: #bb0000; }
+    .s-default   { background: #f2f0ec; color: #66635d; }
 
-    .time-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .card-time { font-size: 11px; color: var(--muted); white-space: nowrap; }
 
     .card-title {
-      font-size: 13.5px;
-      font-weight: 600;
-      line-height: 1.45;
-      color: var(--text);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      font-size: 13.5px; font-weight: 600; line-height: 1.45;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
-
     .card-desc {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.6;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      font-size: 12px; color: var(--muted); line-height: 1.6;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
 
-    .price-row { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
-    .price { font-size: 17px; font-weight: 700; color: #1a7a42; }
-    .discount-badge {
-      font-size: 11px;
-      font-weight: 700;
-      color: #cc2200;
-      background: #ffe8e3;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
+    .price-row { display: flex; align-items: center; gap: 8px; }
+    .price     { font-size: 18px; font-weight: 700; color: var(--green); }
+    .savings   { font-size: 11px; font-weight: 700; color: var(--red); background: var(--red-lt); padding: 2px 6px; border-radius: 4px; }
 
-    .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 8px;
-      border-top: 1px solid var(--border);
-      margin-top: auto;
+    .card-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border); padding-top: 8px; margin-top: auto;
     }
-    .source-label { font-size: 11px; color: #bbb; }
-    .view-link {
-      font-size: 12px;
-      color: var(--accent);
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 3px;
-    }
+    .via { font-size: 11px; color: #c0bdb6; }
+    .view { font-size: 12px; font-weight: 700; color: var(--green); }
 
-    /* ── Empty state ── */
-    .empty { grid-column: 1/-1; text-align: center; padding: 4rem 2rem; color: var(--muted); }
-    .empty p { font-size: 14px; margin-top: 8px; }
-
-    /* ── Submit section ── */
-    .submit-section {
-      max-width: 560px;
-      margin: 2.5rem auto 0;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-    }
-    .submit-section h2 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
-    .submit-section p { font-size: 13px; color: var(--muted); margin-bottom: 1.25rem; }
-    .form-grid { display: flex; flex-direction: column; gap: 10px; }
-    .form-grid input,
-    .form-grid textarea,
-    .form-grid select {
-      width: 100%;
-      padding: 9px 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 13px;
-      font-family: inherit;
-      background: var(--bg);
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .form-grid input:focus,
-    .form-grid textarea:focus,
-    .form-grid select:focus { border-color: #aaa; background: white; }
-    .submit-btn {
-      padding: 9px;
-      background: var(--text);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.15s;
-    }
-    .submit-btn:hover { opacity: 0.85; }
-    .submit-msg { font-size: 13px; color: var(--muted); text-align: center; min-height: 18px; }
-
-    /* ── Spinner ── */
+    /* States */
+    .state { grid-column: 1/-1; text-align: center; padding: 4rem 1.5rem; }
     .spinner {
-      grid-column: 1/-1;
-      display: flex;
-      justify-content: center;
-      padding: 3rem;
-    }
-    .spinner::after {
-      content: "";
-      width: 28px;
-      height: 28px;
-      border: 2px solid var(--border);
-      border-top-color: var(--muted);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      width: 28px; height: 28px; border: 2px solid var(--border);
+      border-top-color: var(--green); border-radius: 50%;
+      animation: spin 0.7s linear infinite; margin: 0 auto;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .err-box {
+      display: inline-block; background: var(--red-lt); border: 1px solid #ffb3a3;
+      border-radius: var(--radius); padding: 1.25rem 1.5rem; text-align: left; max-width: 500px;
+    }
+    .err-box strong { display: block; margin-bottom: 8px; font-size: 14px; }
+    .err-box p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .err-box code { background: #ffd6cc; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+
+    /* Submit */
+    .submit-wrap { max-width: 520px; margin: 2.5rem auto 1rem; }
+    .submit-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+    .submit-card h2 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .submit-card p  { font-size: 12px; color: var(--muted); margin-bottom: 1.1rem; }
+    .fields { display: flex; flex-direction: column; gap: 9px; }
+    .fields input, .fields textarea, .fields select {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 13px; font-family: inherit;
+      background: var(--bg); color: var(--text); outline: none; transition: border-color 0.15s;
+    }
+    .fields input:focus, .fields textarea:focus, .fields select:focus { border-color: var(--green); background: #fff; }
+    .sub-btn {
+      padding: 10px; background: var(--green); color: #fff; border: none;
+      border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: opacity 0.15s;
+    }
+    .sub-btn:hover { opacity: 0.88; }
+    .sub-msg { font-size: 12px; color: var(--muted); text-align: center; min-height: 16px; }
 
     @media (max-width: 600px) {
       .container { padding: 1rem; }
-      .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .card-img, .card-img-placeholder { height: 120px; }
+      .grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
+      .card-img, .img-placeholder { height: 115px; }
     }
-    @media (max-width: 400px) {
-      .grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 360px) { .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
+<!-- Header -->
 <header>
-  <div class="logo">Community <span>Clearances</span></div>
-  <div class="header-right">
-    <span id="lastUpdated">Loading…</span>
+  <div class="logo">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+    </svg>
+    <span class="logo-text">Dollar Saver</span>
+    <span class="logo-pill">FREE &amp; CHEAP</span>
   </div>
+  <div class="header-right" id="lastUpdated">Loading…</div>
 </header>
 
-<div class="filterbar" id="storeBar">
-  <button class="filter-btn active" data-store="all" onclick="filterStore(this)">All stores</button>
-  <div class="divider"></div>
-  <button class="store-btn" data-store="Amazon"   onclick="filterStore(this)">Amazon</button>
-  <button class="store-btn" data-store="Walmart"  onclick="filterStore(this)">Walmart</button>
-  <button class="store-btn" data-store="Target"   onclick="filterStore(this)">Target</button>
-  <button class="store-btn" data-store="Best Buy" onclick="filterStore(this)">Best Buy</button>
-  <button class="store-btn" data-store="Costco"   onclick="filterStore(this)">Costco</button>
-  <button class="store-btn" data-store="eBay"     onclick="filterStore(this)">eBay</button>
-  <button class="store-btn" data-store="Other"    onclick="filterStore(this)">Other</button>
+<!-- Category tabs -->
+<div class="catbar">
+  <button class="cat-btn active" data-cat="all"         onclick="setCat(this)">🏷️ All deals</button>
+  <button class="cat-btn"        data-cat="home"        onclick="setCat(this)">🏠 Home &amp; Hardware</button>
+  <button class="cat-btn"        data-cat="clothing"    onclick="setCat(this)">👕 Clothing</button>
+  <button class="cat-btn"        data-cat="food"        onclick="setCat(this)">🍔 Food &amp; Drinks</button>
+  <button class="cat-btn"        data-cat="electronics" onclick="setCat(this)">💻 Electronics</button>
 </div>
 
+<!-- Store pills -->
+<div class="storebar" id="storebar" style="display:none"></div>
+
+<!-- Main -->
 <div class="container">
-  <div class="stats-bar">
-    <span class="count" id="dealCount"></span>
-    <button class="refresh-btn" onclick="loadDeals()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+  <div class="topbar">
+    <span class="count" id="dealCount">&nbsp;</span>
+    <button class="refresh" onclick="loadDeals()">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+      </svg>
       Refresh
     </button>
   </div>
 
-  <div class="grid" id="dealsGrid">
-    <div class="spinner"></div>
-  </div>
+  <div class="grid" id="grid"><div class="state"><div class="spinner"></div></div></div>
 
   <!-- Submit a deal -->
-  <div class="submit-section">
-    <h2>Found a deal?</h2>
-    <p>Share it with the community — it'll appear on the site within seconds.</p>
-    <div class="form-grid">
-      <input id="sDealTitle" type="text" placeholder="Deal title *" />
-      <textarea id="sDealDesc" placeholder="Description — discount details, promo code, expiry…" rows="2"></textarea>
-      <input id="sDealUrl"   type="url"  placeholder="Link to the deal *" />
-      <input id="sDealImage" type="url"  placeholder="Image URL (optional)" />
-      <select id="sDealCat">
-        <option value="">Category (optional)</option>
-        <option>Electronics</option>
-        <option>Fashion</option>
-        <option>Food & Drink</option>
-        <option>Gaming</option>
-        <option>Home</option>
-        <option>Travel</option>
-        <option>Toys & Kids</option>
-        <option>Entertainment</option>
-        <option>General</option>
-      </select>
-      <button class="submit-btn" onclick="submitDeal()">Submit deal →</button>
-      <p class="submit-msg" id="submitMsg"></p>
+  <div class="submit-wrap">
+    <div class="submit-card">
+      <h2>Found a deal?</h2>
+      <p>Share it — it appears on the site instantly.</p>
+      <div class="fields">
+        <input  id="sTitle" type="text" placeholder="Deal title *" />
+        <textarea id="sDesc" placeholder="Details — promo code, expiry, how to claim…" rows="2"></textarea>
+        <input  id="sUrl"   type="url"  placeholder="Link to the deal *" />
+        <input  id="sImg"   type="url"  placeholder="Product image URL (optional)" />
+        <select id="sCat">
+          <option value="">Category</option>
+          <option value="home">Home &amp; Hardware</option>
+          <option value="clothing">Clothing</option>
+          <option value="food">Food &amp; Drinks</option>
+          <option value="electronics">Electronics</option>
+        </select>
+        <button class="sub-btn" onclick="submitDeal()">Submit deal →</button>
+        <p class="sub-msg" id="subMsg"></p>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ── Supabase SDK ── -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
-  // ── CONFIG — replace these two values ─────────────────────────────────────
-  const SUPABASE_URL = "https://lfghsqbldpyodnenpbnu.supabase.co";
+// ── REPLACE THESE TWO VALUES ───────────────────────────────────────────────
+ const SUPABASE_URL = "https://lfghsqbldpyodnenpbnu.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmZ2hzcWJsZHB5b2RuZW5wYm51Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NTIxMjIsImV4cCI6MjA5NTAyODEyMn0.xGrz9zs8R_b3GESuDfcAoG5P1IjxDphdAv6e0bx8NOQ";
-  // ──────────────────────────────────────────────────────────────────────────
+// ──────────────────────────────────────────────────────────────────────────
 
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  let currentStore = "all";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
-  function timeAgo(d) {
-    const s = Math.floor((Date.now() - new Date(d)) / 1000);
-    if (s < 60)    return "just now";
-    if (s < 3600)  return Math.floor(s / 60)   + "m ago";
-    if (s < 86400) return Math.floor(s / 3600)  + "h ago";
-    return Math.floor(s / 86400) + "d ago";
+// 3 stores per category — keywords used to match deals from RSS feeds
+const CATS = {
+  all: {
+    label: "All", stores: [],
+    keys: []
+  },
+  home: {
+    label: "Home & Hardware",
+    stores: ["Home Depot", "Menards", "Lowe's"],
+    keys: ["home depot","menards","lowe","lowes","hardware","lumber","tool","drill","paint","garden","appliance","power tool","plumbing","flooring"]
+  },
+  clothing: {
+    label: "Clothing",
+    stores: ["Gap", "Old Navy", "Kohl's"],
+    keys: ["gap","old navy","kohl","kohls","shirt","pants","jeans","jacket","hoodie","dress","shoes","sneaker","apparel","clothing","fashion","shorts","sweater"]
+  },
+  food: {
+    label: "Food & Drinks",
+    stores: ["Chick-fil-A", "Starbucks", "McDonald's"],
+    keys: ["chick-fil-a","chickfila","starbucks","mcdonald","mcdonalds","burger","coffee","food","meal","restaurant","bogo","free sandwich","free drink","free coffee"]
+  },
+  electronics: {
+    label: "Electronics",
+    stores: ["Amazon", "Best Buy", "Target"],
+    keys: ["amazon","best buy","bestbuy","target","laptop","phone","tablet","tv ","monitor","ipad","iphone","samsung","headphone","speaker","camera","smart home","gaming","console"]
   }
+};
 
-  function storeBadgeClass(store = "") {
-    const map = { "Amazon": "Amazon", "Walmart": "Walmart", "Target": "Target",
-                  "Best Buy": "BestBuy", "Costco": "Costco", "eBay": "eBay",
-                  "Newegg": "Newegg", "Nike": "Nike" };
-    return "store-badge store-" + (map[store] || "Other");
-  }
+// Store badge CSS class
+const STORE_CLASS = {
+  "Home Depot":"s-homedepot","Menards":"s-menards","Lowe's":"s-lowes",
+  "Gap":"s-gap","Old Navy":"s-oldnavy","Kohl's":"s-kohls",
+  "Chick-fil-A":"s-chickfila","Starbucks":"s-starbucks","McDonald's":"s-mcdonalds",
+  "Amazon":"s-amazon","Best Buy":"s-bestbuy","Target":"s-target",
+};
 
-  function storeInitials(store = "") {
-    if (!store || store === "Other") return "DEAL";
-    return store.slice(0, 4).toUpperCase();
-  }
+let activeCat   = "all";
+let activeStore = "all";
 
-  // ── Render ────────────────────────────────────────────────────────────────
-  function renderCards(deals) {
-    const grid = document.getElementById("dealsGrid");
-    document.getElementById("dealCount").textContent = deals.length + " deals";
+// ── Store pills ────────────────────────────────────────────────────────────
+function renderPills() {
+  const bar    = document.getElementById("storebar");
+  const stores = CATS[activeCat]?.stores || [];
+  if (!stores.length) { bar.style.display = "none"; return; }
+  bar.style.display = "flex";
+  bar.innerHTML =
+    `<button class="store-pill ${activeStore==="all"?"active":""}" data-s="all" onclick="setStore(this)">All</button>` +
+    stores.map(s =>
+      `<button class="store-pill ${activeStore===s?"active":""}" data-s="${s}" onclick="setStore(this)">${s}</button>`
+    ).join("");
+}
 
-    if (!deals.length) {
-      grid.innerHTML = `<div class="empty">
-        <strong>No deals yet</strong>
-        <p>The fetcher will pull fresh deals on its next run, or submit one below.</p>
-      </div>`;
-      return;
-    }
-
-    grid.innerHTML = deals.map(d => {
-      const imgHtml = d.image_url
-        ? `<img class="card-img" src="${d.image_url}" alt="" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\\'card-img-placeholder\\'><span class=\\'store-icon\\'>${storeInitials(d.store)}</span></div>'" />`
-        : `<div class="card-img-placeholder"><span class="store-icon">${storeInitials(d.store)}</span></div>`;
-
-      const priceHtml = (d.price || d.discount)
-        ? `<div class="price-row">
-            ${d.price    ? `<span class="price">${d.price}</span>` : ""}
-            ${d.discount ? `<span class="discount-badge">${d.discount}</span>` : ""}
-          </div>` : "";
-
-      return `
-        <a class="card" href="${d.url || '#'}" target="_blank" rel="noopener">
-          ${imgHtml}
-          <div class="card-body">
-            <div class="card-top">
-              <span class="${storeBadgeClass(d.store)}">${d.store || "Deal"}</span>
-              <span class="time-label">${timeAgo(d.posted_at)}</span>
-            </div>
-            <p class="card-title">${d.title}</p>
-            ${d.description ? `<p class="card-desc">${d.description}</p>` : ""}
-            ${priceHtml}
-            <div class="card-footer">
-              <span class="source-label">via ${d.source || "community"}</span>
-              <span class="view-link">View deal →</span>
-            </div>
-          </div>
-        </a>`;
-    }).join("");
-  }
-
-  // ── Load deals ────────────────────────────────────────────────────────────
-  async function loadDeals() {
-    document.getElementById("dealsGrid").innerHTML = '<div class="spinner"></div>';
-
-    let q = sb.from("deals").select("*")
-      .eq("is_approved", true)
-      .order("posted_at", { ascending: false })
-      .limit(80);
-
-    if (currentStore !== "all") q = q.eq("store", currentStore);
-
-    const { data, error } = await q;
-
-    document.getElementById("lastUpdated").textContent =
-      "Updated " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
-    if (error) {
-      document.getElementById("dealsGrid").innerHTML =
-        `<div class="empty"><strong>Could not load deals</strong><p>${error.message}</p></div>`;
-      return;
-    }
-
-    renderCards(data || []);
-  }
-
-  // ── Filter by store ───────────────────────────────────────────────────────
-  function filterStore(btn) {
-    document.querySelectorAll("#storeBar button").forEach(b => {
-      b.classList.remove("active");
-      b.className = b.dataset.store === "all" ? "filter-btn" : "store-btn";
-    });
-    btn.classList.add("active");
-    currentStore = btn.dataset.store;
-    loadDeals();
-  }
-
-  // ── Submit a deal ─────────────────────────────────────────────────────────
-  async function submitDeal() {
-    const title = document.getElementById("sDealTitle").value.trim();
-    const url   = document.getElementById("sDealUrl").value.trim();
-    const msg   = document.getElementById("submitMsg");
-
-    if (!title || !url) { msg.textContent = "Title and link are both required."; return; }
-
-    msg.textContent = "Submitting…";
-
-    const { error } = await sb.from("deals").insert({
-      title,
-      description: document.getElementById("sDealDesc").value,
-      url,
-      image_url:  document.getElementById("sDealImage").value || null,
-      category:   document.getElementById("sDealCat").value || "General",
-      source:     "submitted",
-      store:      "Other",
-      is_approved: true,
-      posted_at:  new Date().toISOString(),
-    });
-
-    if (error) {
-      msg.textContent = "Something went wrong: " + error.message;
-    } else {
-      msg.textContent = "Deal submitted! It will appear shortly.";
-      ["sDealTitle","sDealDesc","sDealUrl","sDealImage"].forEach(id =>
-        document.getElementById(id).value = "");
-      setTimeout(loadDeals, 1500);
-    }
-  }
-
-  // ── Boot ──────────────────────────────────────────────────────────────────
+function setCat(btn) {
+  document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  activeCat   = btn.dataset.cat;
+  activeStore = "all";
+  renderPills();
   loadDeals();
-  setInterval(loadDeals, 90000); // auto-refresh every 90 seconds
-</script>
+}
 
+function setStore(btn) {
+  document.querySelectorAll(".store-pill").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  activeStore = btn.dataset.s;
+  loadDeals();
+}
+
+// ── Filters ────────────────────────────────────────────────────────────────
+function matchesCat(d) {
+  if (activeCat === "all") return true;
+  const text = [(d.title||""),(d.store||""),(d.description||""),(d.url||"")].join(" ").toLowerCase();
+
+  if (activeStore !== "all") return text.includes(activeStore.toLowerCase());
+
+  return CATS[activeCat].keys.some(k => text.includes(k));
+}
+
+// Hide items over $1000 unless discount is 30%+
+function passesPrice(d) {
+  const combined = [(d.title||""),(d.price||""),(d.discount||"")].join(" ");
+  const pm = combined.replace(/,/g,"").match(/\$(\d+)/g);
+  if (!pm) return true;
+  const maxPrice = Math.max(...pm.map(p => parseInt(p.replace("$",""))));
+  if (maxPrice < 1000) return true;
+  const dm = combined.match(/(\d+)%/);
+  return dm ? parseInt(dm[1]) >= 30 : false;
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function timeAgo(d) {
+  const s = Math.floor((Date.now() - new Date(d)) / 1000);
+  if (s < 60)    return "just now";
+  if (s < 3600)  return Math.floor(s/60)   + "m ago";
+  if (s < 86400) return Math.floor(s/3600) + "h ago";
+  return Math.floor(s/86400) + "d ago";
+}
+
+function discNum(d) {
+  const m = [(d.discount||""),(d.title||"")].join(" ").match(/(\d+)%/);
+  return m ? parseInt(m[1]) : 0;
+}
+
+function storeClass(store) { return "sbadge " + (STORE_CLASS[store] || "s-default"); }
+
+function cardHtml(d) {
+  const free   = /\bfree\b/i.test(d.title||"");
+  const pct    = discNum(d);
+  const isHot  = pct >= 40;
+  const label  = free ? "FREE" : (d.store || "Deal");
+
+  const imgHtml = d.image_url
+    ? `<img class="card-img" src="${d.image_url}" alt="" loading="lazy"
+         onerror="this.parentNode.innerHTML='<div class=\\'img-placeholder\\'><span class=\\'store-initial\\'>${label.slice(0,5)}</span></div>'">`
+    : `<div class="img-placeholder"><span class="store-initial">${label.slice(0,5)}</span></div>`;
+
+  const topBadge = free
+    ? `<span class="badge-free">★ FREE</span>`
+    : isHot ? `<span class="badge-hot">🔥 Hot deal</span>` : "";
+
+  const offBadge = pct >= 5
+    ? `<span class="badge-off">${pct}% OFF</span>` : "";
+
+  const priceRow = (d.price || d.discount)
+    ? `<div class="price-row">
+        ${d.price    ? `<span class="price">${d.price}</span>` : ""}
+        ${d.discount ? `<span class="savings">${d.discount}</span>` : ""}
+       </div>` : "";
+
+  return `
+    <a class="card" href="${d.url||"#"}" target="_blank" rel="noopener noreferrer">
+      <div class="img-wrap">
+        ${imgHtml}
+        ${topBadge}
+        ${offBadge}
+      </div>
+      <div class="body">
+        <div class="body-top">
+          <span class="${storeClass(d.store)}">${d.store||"Deal"}</span>
+          <span class="card-time">${timeAgo(d.posted_at)}</span>
+        </div>
+        <p class="card-title">${d.title||""}</p>
+        ${d.description ? `<p class="card-desc">${d.description}</p>` : ""}
+        ${priceRow}
+        <div class="card-foot">
+          <span class="via">via ${d.source||"community"}</span>
+          <span class="view">View →</span>
+        </div>
+      </div>
+    </a>`;
+}
+
+// ── Load deals ─────────────────────────────────────────────────────────────
+async function loadDeals() {
+  document.getElementById("grid").innerHTML = '<div class="state"><div class="spinner"></div></div>';
+
+  // Guard: keys not set yet
+  if (SUPABASE_URL === "YOUR_SUPABASE_URL") {
+    document.getElementById("grid").innerHTML = `
+      <div class="state"><div class="err-box">
+        <strong>⚠️ Supabase not connected yet</strong>
+        <p>In this file, replace:<br><br>
+        <code>YOUR_SUPABASE_URL</code> with your Project URL<br>
+        <code>YOUR_SUPABASE_ANON_KEY</code> with your anon key<br><br>
+        Find both at: Supabase → Project Settings → API tab</p>
+      </div></div>`;
+    return;
+  }
+
+  const { data, error } = await sb
+    .from("deals")
+    .select("*")
+    .order("posted_at", { ascending: false })
+    .limit(200);
+
+  document.getElementById("lastUpdated").textContent =
+    "Updated " + new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+
+  if (error) {
+    document.getElementById("grid").innerHTML = `
+      <div class="state"><div class="err-box">
+        <strong>⚠️ Could not load deals</strong>
+        <p>${error.message}<br><br>
+        Check your Supabase URL and anon key are correct.</p>
+      </div></div>`;
+    return;
+  }
+
+  const filtered = (data||[]).filter(d => matchesCat(d) && passesPrice(d));
+  document.getElementById("dealCount").textContent =
+    filtered.length + " deal" + (filtered.length !== 1 ? "s" : "");
+
+  if (!filtered.length) {
+    document.getElementById("grid").innerHTML = `
+      <div class="state">
+        <p style="font-size:15px;font-weight:600;margin-bottom:6px">No deals yet in this category</p>
+        <p style="font-size:13px;color:var(--muted)">The fetcher runs every hour — check back soon, or submit one below.</p>
+      </div>`;
+    return;
+  }
+
+  document.getElementById("grid").innerHTML = filtered.map(cardHtml).join("");
+}
+
+// ── Submit ─────────────────────────────────────────────────────────────────
+async function submitDeal() {
+  const title = document.getElementById("sTitle").value.trim();
+  const url   = document.getElementById("sUrl").value.trim();
+  const msg   = document.getElementById("subMsg");
+  if (!title || !url) { msg.textContent = "Title and link are required."; return; }
+  msg.textContent = "Submitting…";
+  const { error } = await sb.from("deals").insert({
+    title, url,
+    description: document.getElementById("sDesc").value,
+    image_url:   document.getElementById("sImg").value || null,
+    category:    document.getElementById("sCat").value || "other",
+    source: "submitted", store: "Other",
+    is_approved: true, posted_at: new Date().toISOString(),
+  });
+  if (error) { msg.textContent = "Error: " + error.message; return; }
+  msg.textContent = "✓ Submitted! It'll appear shortly.";
+  ["sTitle","sDesc","sUrl","sImg"].forEach(id => document.getElementById(id).value = "");
+  setTimeout(loadDeals, 1500);
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+renderPills();
+loadDeals();
+setInterval(loadDeals, 90000);
+</script>
 </body>
 </html>
