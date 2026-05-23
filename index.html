@@ -3,40 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dollar Saver — Best Deals Today</title>
-  <meta name="description" content="Free and cheap deals from Home Depot, Menards, Gap, Old Navy, Chick-fil-A, Starbucks and more." />
+  <title>Save Your Dollar — Best Deals Today</title>
+  <meta name="description" content="The best deals from Home Depot, Menards, Gap, Old Navy, Chick-fil-A, Starbucks and more — updated hourly." />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --green:    #1d7a45;
-      --green-lt: #eaf5ef;
-      --red:      #c92000;
-      --red-lt:   #fff1ee;
-      --gold:     #f5a623;
-      --bg:       #f5f4f0;
-      --surface:  #ffffff;
-      --border:   #e6e3dc;
-      --text:     #1b1b18;
-      --muted:    #86837c;
-      --radius:   10px;
+      --green:   #1d7a45;
+      --green-d: #165e34;
+      --green-lt:#eaf5ef;
+      --red:     #c92000;
+      --red-lt:  #fff1ee;
+      --gold:    #f5a200;
+      --bg:      #f5f4f0;
+      --surface: #ffffff;
+      --border:  #e6e3dc;
+      --text:    #1b1b18;
+      --muted:   #86837c;
+      --radius:  10px;
+      --shadow:  0 1px 3px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.05);
     }
-    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    /* Header */
+    /* ── Header ── */
     header {
-      background: var(--green); height: 54px;
+      background: var(--green); height: 56px;
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 1.5rem; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    .logo { display: flex; align-items: center; gap: 10px; }
-    .logo-text { font-size: 1.25rem; font-weight: 800; color: #fff; letter-spacing: -0.03em; }
-    .logo-pill {
-      font-size: 10px; font-weight: 800; background: var(--gold);
-      color: #3a1f00; padding: 3px 8px; border-radius: 20px; letter-spacing: 0.05em;
-    }
-    .header-right { font-size: 11px; color: rgba(255,255,255,0.6); }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo svg { opacity: 0.95; }
+    .logo-text { font-size: 1.2rem; font-weight: 800; color: #fff; letter-spacing: -0.03em; }
+    .logo-dot   { color: var(--gold); }
+    .header-meta { font-size: 11px; color: rgba(255,255,255,0.55); }
 
-    /* Category bar */
+    /* ── Category bar ── */
     .catbar {
       background: var(--surface); border-bottom: 1px solid var(--border);
       display: flex; align-items: center; gap: 2px;
@@ -44,182 +45,165 @@
     }
     .catbar::-webkit-scrollbar { display: none; }
     .cat-btn {
-      flex-shrink: 0; padding: 6px 16px; border-radius: 20px; font-size: 13px;
-      font-weight: 600; border: none; background: transparent; color: var(--muted);
+      flex-shrink: 0; padding: 6px 18px; border-radius: 20px;
+      font-size: 13px; font-weight: 600; border: none;
+      background: transparent; color: var(--muted);
       cursor: pointer; white-space: nowrap; transition: all 0.12s;
     }
-    .cat-btn:hover { background: var(--bg); color: var(--text); }
+    .cat-btn:hover  { background: var(--bg); color: var(--text); }
     .cat-btn.active { background: var(--green); color: #fff; }
 
-    /* Store pills */
+    /* ── Store pills ── */
     .storebar {
       background: var(--bg); border-bottom: 1px solid var(--border);
       display: flex; align-items: center; gap: 6px;
-      padding: 8px 1.25rem; overflow-x: auto; scrollbar-width: none;
+      padding: 7px 1.25rem; overflow-x: auto; scrollbar-width: none;
     }
     .storebar::-webkit-scrollbar { display: none; }
     .store-pill {
-      flex-shrink: 0; padding: 4px 13px; border-radius: 20px; font-size: 12px;
-      font-weight: 600; border: 1.5px solid var(--border); background: var(--surface);
-      color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.12s;
+      flex-shrink: 0; padding: 4px 13px; border-radius: 20px;
+      font-size: 12px; font-weight: 600;
+      border: 1.5px solid var(--border); background: var(--surface);
+      color: var(--muted); cursor: pointer; transition: all 0.12s;
     }
-    .store-pill:hover { color: var(--text); border-color: #bbb; }
+    .store-pill:hover  { color: var(--text); border-color: #bbb; }
     .store-pill.active { border-color: var(--green); color: var(--green); background: var(--green-lt); }
 
-    /* Container */
+    /* ── Hero strip (Today's top pick) ── */
+    .hero-strip {
+      background: linear-gradient(135deg, var(--green-d) 0%, var(--green) 100%);
+      padding: 14px 1.5rem; display: flex; align-items: center; gap: 12px;
+    }
+    .hero-strip .badge {
+      background: var(--gold); color: #3a1f00;
+      font-size: 10px; font-weight: 800; padding: 3px 9px;
+      border-radius: 20px; letter-spacing: 0.06em; white-space: nowrap;
+    }
+    .hero-strip .text { font-size: 13px; color: rgba(255,255,255,0.9); }
+    .hero-strip .text strong { color: #fff; font-weight: 700; }
+
+    /* ── Container ── */
     .container { max-width: 1280px; margin: 0 auto; padding: 1.25rem 1.5rem; }
+
     .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-    .count { font-size: 13px; color: var(--muted); }
-    .refresh {
+    .deal-count { font-size: 13px; color: var(--muted); }
+    .sort-wrap { display: flex; align-items: center; gap: 8px; }
+    .sort-label { font-size: 12px; color: var(--muted); }
+    .sort-select {
+      font-size: 12px; padding: 4px 8px; border: 1px solid var(--border);
+      border-radius: 6px; background: var(--surface); color: var(--text);
+      cursor: pointer; outline: none;
+    }
+    .refresh-btn {
       font-size: 12px; color: var(--muted); background: none;
       border: 1px solid var(--border); border-radius: 6px;
       padding: 4px 10px; cursor: pointer; display: flex; align-items: center; gap: 5px;
     }
-    .refresh:hover { border-color: #aaa; color: var(--text); }
+    .refresh-btn:hover { border-color: #aaa; color: var(--text); }
 
-    /* Grid */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    /* ── Grid ── */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(265px, 1fr)); gap: 14px; }
 
-    /* Card */
+    /* ── Card ── */
     .card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); overflow: hidden;
       display: flex; flex-direction: column;
       text-decoration: none; color: inherit;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
     }
-    .card:hover { border-color: #c8c5be; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .card:hover { border-color: #c5c2bb; box-shadow: var(--shadow); transform: translateY(-1px); }
 
     .img-wrap { position: relative; flex-shrink: 0; }
-    .card-img { width: 100%; height: 150px; object-fit: cover; display: block; background: var(--bg); }
-    .img-placeholder {
-      width: 100%; height: 150px; background: var(--bg);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .store-initial { font-size: 26px; font-weight: 900; opacity: 0.15; letter-spacing: -0.04em; text-transform: uppercase; }
+    .card-img  { width: 100%; height: 150px; object-fit: cover; display: block; background: var(--bg); }
+    .img-ph    { width: 100%; height: 150px; background: linear-gradient(135deg,#f0ede6,#e8e4dc); display: flex; align-items: center; justify-content: center; }
+    .img-ph-text { font-size: 20px; font-weight: 900; opacity: 0.18; letter-spacing: -0.04em; text-transform: uppercase; }
 
-    .badge-free {
-      position: absolute; top: 8px; left: 8px;
-      background: var(--gold); color: #3a1f00;
-      font-size: 10px; font-weight: 800; padding: 3px 9px;
-      border-radius: 20px; letter-spacing: 0.05em;
-    }
-    .badge-hot {
-      position: absolute; top: 8px; left: 8px;
-      background: var(--red); color: #fff;
-      font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
-    }
-    .badge-off {
-      position: absolute; top: 8px; right: 8px;
-      background: var(--surface); color: var(--red);
-      font-size: 11px; font-weight: 700; padding: 3px 8px;
-      border-radius: 6px; border: 1px solid var(--border);
-    }
+    .badge-free { position:absolute; top:8px; left:8px; background:var(--gold); color:#3a1f00; font-size:10px; font-weight:800; padding:3px 9px; border-radius:20px; letter-spacing:.05em; }
+    .badge-hot  { position:absolute; top:8px; left:8px; background:var(--red);  color:#fff;    font-size:10px; font-weight:700; padding:3px 9px; border-radius:20px; }
+    .badge-pct  { position:absolute; top:8px; right:8px; background:var(--surface); color:var(--red); font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; border:1px solid var(--border); }
 
-    .body { padding: 11px 13px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .card-body  { padding: 12px 14px; flex:1; display:flex; flex-direction:column; gap:6px; }
+    .card-top   { display:flex; align-items:center; justify-content:space-between; }
 
-    .body-top { display: flex; align-items: center; justify-content: space-between; }
-    .sbadge {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.03em;
-      padding: 2px 8px; border-radius: 20px; text-transform: uppercase; flex-shrink: 0;
-    }
-    /* Store badge colours */
-    .s-homedepot { background: #fff3e0; color: #bf5000; }
-    .s-menards   { background: #e8f5e8; color: #1a6020; }
-    .s-lowes     { background: #e0ecff; color: #0044a8; }
-    .s-gap       { background: #eeeefd; color: #2222aa; }
-    .s-oldnavy   { background: #ffeef8; color: #990066; }
-    .s-kohls     { background: #fff0e0; color: #994400; }
-    .s-chickfila { background: #fff5e0; color: #b05c00; }
-    .s-starbucks { background: #e0f5ea; color: #00623a; }
-    .s-mcdonalds { background: #fffae0; color: #aa7700; }
-    .s-amazon    { background: #fff4d4; color: #a05000; }
-    .s-bestbuy   { background: #e8e8ff; color: #1515aa; }
-    .s-target    { background: #ffe8e8; color: #bb0000; }
-    .s-default   { background: #f2f0ec; color: #66635d; }
+    .sbadge { font-size:10px; font-weight:700; letter-spacing:.03em; padding:2px 8px; border-radius:20px; text-transform:uppercase; flex-shrink:0; }
+    .s-homedepot { background:#fff3e0; color:#bf5000; }
+    .s-menards   { background:#e8f5e8; color:#1a6020; }
+    .s-lowes     { background:#e0ecff; color:#0044a8; }
+    .s-gap       { background:#eeeefd; color:#2222aa; }
+    .s-oldnavy   { background:#ffeef8; color:#990066; }
+    .s-kohls     { background:#fff8e0; color:#996600; }
+    .s-chickfila { background:#fff5e0; color:#b05c00; }
+    .s-starbucks { background:#e0f5ea; color:#00623a; }
+    .s-mcdonalds { background:#fffae0; color:#aa7700; }
+    .s-amazon    { background:#fff4d4; color:#a05000; }
+    .s-bestbuy   { background:#e8e8ff; color:#1515aa; }
+    .s-target    { background:#ffe8e8; color:#bb0000; }
+    .s-walmart   { background:#e8f4ff; color:#0060c0; }
+    .s-default   { background:#f2f0ec; color:#66635d; }
 
-    .card-time { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .card-time { font-size:11px; color:var(--muted); white-space:nowrap; }
+    .card-title { font-size:13.5px; font-weight:600; line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .card-desc  { font-size:12px; color:var(--muted); line-height:1.6;  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 
-    .card-title {
-      font-size: 13.5px; font-weight: 600; line-height: 1.45;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-    }
-    .card-desc {
-      font-size: 12px; color: var(--muted); line-height: 1.6;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-    }
+    .price-row { display:flex; align-items:center; gap:8px; }
+    .price     { font-size:18px; font-weight:700; color:var(--green); }
+    .savings   { font-size:11px; font-weight:700; color:var(--red); background:var(--red-lt); padding:2px 6px; border-radius:4px; }
 
-    .price-row { display: flex; align-items: center; gap: 8px; }
-    .price     { font-size: 18px; font-weight: 700; color: var(--green); }
-    .savings   { font-size: 11px; font-weight: 700; color: var(--red); background: var(--red-lt); padding: 2px 6px; border-radius: 4px; }
+    .card-foot { display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--border); padding-top:8px; margin-top:auto; }
+    .via       { font-size:11px; color:#c0bdb6; }
+    .view-link { font-size:12px; font-weight:700; color:var(--green); display:flex; align-items:center; gap:3px; }
 
-    .card-foot {
-      display: flex; align-items: center; justify-content: space-between;
-      border-top: 1px solid var(--border); padding-top: 8px; margin-top: auto;
-    }
-    .via { font-size: 11px; color: #c0bdb6; }
-    .view { font-size: 12px; font-weight: 700; color: var(--green); }
+    /* ── States ── */
+    .state { grid-column:1/-1; text-align:center; padding:4rem 1.5rem; }
+    .spinner { width:28px; height:28px; border:2px solid var(--border); border-top-color:var(--green); border-radius:50%; animation:spin .7s linear infinite; margin:0 auto 1rem; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .err-box { display:inline-block; background:var(--red-lt); border:1px solid #ffb3a3; border-radius:var(--radius); padding:1.25rem 1.5rem; text-align:left; max-width:500px; }
+    .err-box strong { display:block; margin-bottom:8px; font-size:14px; }
+    .err-box p { font-size:13px; color:var(--muted); line-height:1.7; }
+    .err-box code { background:#ffd6cc; padding:2px 5px; border-radius:3px; font-size:12px; }
 
-    /* States */
-    .state { grid-column: 1/-1; text-align: center; padding: 4rem 1.5rem; }
-    .spinner {
-      width: 28px; height: 28px; border: 2px solid var(--border);
-      border-top-color: var(--green); border-radius: 50%;
-      animation: spin 0.7s linear infinite; margin: 0 auto;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .err-box {
-      display: inline-block; background: var(--red-lt); border: 1px solid #ffb3a3;
-      border-radius: var(--radius); padding: 1.25rem 1.5rem; text-align: left; max-width: 500px;
-    }
-    .err-box strong { display: block; margin-bottom: 8px; font-size: 14px; }
-    .err-box p { font-size: 13px; color: var(--muted); line-height: 1.6; }
-    .err-box code { background: #ffd6cc; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
-
-    /* Submit */
-    .submit-wrap { max-width: 520px; margin: 2.5rem auto 1rem; }
-    .submit-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
-    .submit-card h2 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-    .submit-card p  { font-size: 12px; color: var(--muted); margin-bottom: 1.1rem; }
-    .fields { display: flex; flex-direction: column; gap: 9px; }
+    /* ── Submit ── */
+    .submit-wrap { max-width:520px; margin:2.5rem auto 2rem; }
+    .submit-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; }
+    .submit-card h2 { font-size:15px; font-weight:700; margin-bottom:4px; }
+    .submit-card p  { font-size:12px; color:var(--muted); margin-bottom:1.1rem; line-height:1.5; }
+    .fields { display:flex; flex-direction:column; gap:9px; }
     .fields input, .fields textarea, .fields select {
-      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
-      border-radius: 8px; font-size: 13px; font-family: inherit;
-      background: var(--bg); color: var(--text); outline: none; transition: border-color 0.15s;
+      width:100%; padding:9px 12px; border:1px solid var(--border);
+      border-radius:8px; font-size:13px; font-family:inherit;
+      background:var(--bg); color:var(--text); outline:none; transition:border-color .15s;
     }
-    .fields input:focus, .fields textarea:focus, .fields select:focus { border-color: var(--green); background: #fff; }
-    .sub-btn {
-      padding: 10px; background: var(--green); color: #fff; border: none;
-      border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: opacity 0.15s;
-    }
-    .sub-btn:hover { opacity: 0.88; }
-    .sub-msg { font-size: 12px; color: var(--muted); text-align: center; min-height: 16px; }
+    .fields input:focus, .fields textarea:focus, .fields select:focus { border-color:var(--green); background:#fff; }
+    .sub-btn { padding:10px; background:var(--green); color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; transition:opacity .15s; }
+    .sub-btn:hover { opacity:.88; }
+    .sub-msg { font-size:12px; color:var(--muted); text-align:center; min-height:16px; }
 
-    @media (max-width: 600px) {
-      .container { padding: 1rem; }
-      .grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
-      .card-img, .img-placeholder { height: 115px; }
+    /* ── Footer ── */
+    footer { text-align:center; padding:2rem 1rem; font-size:12px; color:#bbb; border-top:1px solid var(--border); margin-top:1rem; }
+
+    @media (max-width:600px) {
+      .container { padding:1rem; }
+      .grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+      .card-img, .img-ph { height:115px; }
     }
-    @media (max-width: 360px) { .grid { grid-template-columns: 1fr; } }
+    @media (max-width:360px) { .grid { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
 
 <!-- Header -->
 <header>
-  <div class="logo">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" aria-hidden="true">
-      <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-    </svg>
-    <span class="logo-text">Dollar Saver</span>
-    <span class="logo-pill">FREE &amp; CHEAP</span>
-  </div>
-  <div class="header-right" id="lastUpdated">Loading…</div>
+  <a class="logo" href="/">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    <span class="logo-text">Save Your<span class="logo-dot">Dollar</span></span>
+  </a>
+  <div class="header-meta" id="lastUpdated">Loading…</div>
 </header>
 
 <!-- Category tabs -->
 <div class="catbar">
-  <button class="cat-btn active" data-cat="all"         onclick="setCat(this)">🏷️ All deals</button>
+  <button class="cat-btn active" data-cat="all"         onclick="setCat(this)">🏷️ All Deals</button>
   <button class="cat-btn"        data-cat="home"        onclick="setCat(this)">🏠 Home &amp; Hardware</button>
   <button class="cat-btn"        data-cat="clothing"    onclick="setCat(this)">👕 Clothing</button>
   <button class="cat-btn"        data-cat="food"        onclick="setCat(this)">🍔 Food &amp; Drinks</button>
@@ -232,33 +216,41 @@
 <!-- Main -->
 <div class="container">
   <div class="topbar">
-    <span class="count" id="dealCount">&nbsp;</span>
-    <button class="refresh" onclick="loadDeals()">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
-      </svg>
-      Refresh
-    </button>
+    <span class="deal-count" id="dealCount">&nbsp;</span>
+    <div class="sort-wrap">
+      <span class="sort-label">Sort:</span>
+      <select class="sort-select" id="sortSelect" onchange="loadDeals()">
+        <option value="newest">Newest first</option>
+        <option value="discount">Biggest discount</option>
+      </select>
+      <button class="refresh-btn" onclick="loadDeals()">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Refresh
+      </button>
+    </div>
   </div>
 
-  <div class="grid" id="grid"><div class="state"><div class="spinner"></div></div></div>
+  <div class="grid" id="grid">
+    <div class="state"><div class="spinner"></div></div>
+  </div>
 
-  <!-- Submit a deal -->
+  <!-- Submit -->
   <div class="submit-wrap">
     <div class="submit-card">
       <h2>Found a deal?</h2>
-      <p>Share it — it appears on the site instantly.</p>
+      <p>Share it with the community — it appears on the site instantly and helps everyone save.</p>
       <div class="fields">
-        <input  id="sTitle" type="text" placeholder="Deal title *" />
+        <input   id="sTitle" type="text" placeholder="Deal title — e.g. Home Depot: 40% off Milwaukee tools *" />
         <textarea id="sDesc" placeholder="Details — promo code, expiry, how to claim…" rows="2"></textarea>
-        <input  id="sUrl"   type="url"  placeholder="Link to the deal *" />
-        <input  id="sImg"   type="url"  placeholder="Product image URL (optional)" />
+        <input   id="sUrl"   type="url"  placeholder="Link to the deal *" />
+        <input   id="sImg"   type="url"  placeholder="Product image URL (optional)" />
         <select id="sCat">
-          <option value="">Category</option>
+          <option value="">Select category</option>
           <option value="home">Home &amp; Hardware</option>
           <option value="clothing">Clothing</option>
           <option value="food">Food &amp; Drinks</option>
           <option value="electronics">Electronics</option>
+          <option value="general">General</option>
         </select>
         <button class="sub-btn" onclick="submitDeal()">Submit deal →</button>
         <p class="sub-msg" id="subMsg"></p>
@@ -266,6 +258,10 @@
     </div>
   </div>
 </div>
+
+<footer>
+  © 2025 SaveYourDollar.com · Deals updated hourly · <a href="mailto:hello@saveyourdollar.com" style="color:#aaa">Contact</a>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
@@ -276,49 +272,27 @@
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// 3 stores per category — keywords used to match deals from RSS feeds
-const CATS = {
-  all: {
-    label: "All", stores: [],
-    keys: []
-  },
-  home: {
-    label: "Home & Hardware",
-    stores: ["Home Depot", "Menards", "Lowe's"],
-    keys: ["home depot","menards","lowe","lowes","hardware","lumber","tool","drill","paint","garden","appliance","power tool","plumbing","flooring"]
-  },
-  clothing: {
-    label: "Clothing",
-    stores: ["Gap", "Old Navy", "Kohl's"],
-    keys: ["gap","old navy","kohl","kohls","shirt","pants","jeans","jacket","hoodie","dress","shoes","sneaker","apparel","clothing","fashion","shorts","sweater"]
-  },
-  food: {
-    label: "Food & Drinks",
-    stores: ["Chick-fil-A", "Starbucks", "McDonald's"],
-    keys: ["chick-fil-a","chickfila","starbucks","mcdonald","mcdonalds","burger","coffee","food","meal","restaurant","bogo","free sandwich","free drink","free coffee"]
-  },
-  electronics: {
-    label: "Electronics",
-    stores: ["Amazon", "Best Buy", "Target"],
-    keys: ["amazon","best buy","bestbuy","target","laptop","phone","tablet","tv ","monitor","ipad","iphone","samsung","headphone","speaker","camera","smart home","gaming","console"]
-  }
+const STORES = {
+  all:         [],
+  home:        ["Home Depot","Menards","Lowe's"],
+  clothing:    ["Gap","Old Navy","Kohl's"],
+  food:        ["Chick-fil-A","Starbucks","McDonald's"],
+  electronics: ["Amazon","Best Buy","Target"],
 };
 
-// Store badge CSS class
 const STORE_CLASS = {
   "Home Depot":"s-homedepot","Menards":"s-menards","Lowe's":"s-lowes",
   "Gap":"s-gap","Old Navy":"s-oldnavy","Kohl's":"s-kohls",
   "Chick-fil-A":"s-chickfila","Starbucks":"s-starbucks","McDonald's":"s-mcdonalds",
-  "Amazon":"s-amazon","Best Buy":"s-bestbuy","Target":"s-target",
+  "Amazon":"s-amazon","Best Buy":"s-bestbuy","Target":"s-target","Walmart":"s-walmart",
 };
 
-let activeCat   = "all";
-let activeStore = "all";
+let activeCat = "all", activeStore = "all";
 
 // ── Store pills ────────────────────────────────────────────────────────────
 function renderPills() {
-  const bar    = document.getElementById("storebar");
-  const stores = CATS[activeCat]?.stores || [];
+  const bar = document.getElementById("storebar");
+  const stores = STORES[activeCat] || [];
   if (!stores.length) { bar.style.display = "none"; return; }
   bar.style.display = "flex";
   bar.innerHTML =
@@ -331,37 +305,35 @@ function renderPills() {
 function setCat(btn) {
   document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
-  activeCat   = btn.dataset.cat;
-  activeStore = "all";
-  renderPills();
-  loadDeals();
+  activeCat = btn.dataset.cat; activeStore = "all";
+  renderPills(); loadDeals();
 }
-
 function setStore(btn) {
   document.querySelectorAll(".store-pill").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
-  activeStore = btn.dataset.s;
-  loadDeals();
+  activeStore = btn.dataset.s; loadDeals();
 }
 
 // ── Filters ────────────────────────────────────────────────────────────────
 function matchesCat(d) {
   if (activeCat === "all") return true;
-  const text = [(d.title||""),(d.store||""),(d.description||""),(d.url||"")].join(" ").toLowerCase();
-
-  if (activeStore !== "all") return text.includes(activeStore.toLowerCase());
-
-  return CATS[activeCat].keys.some(k => text.includes(k));
+  // Match by saved category field (exact) OR by store name
+  const catMatch = (d.category || "").toLowerCase() === activeCat;
+  const storeList = STORES[activeCat] || [];
+  const storeMatch = storeList.some(s => (d.store||"").toLowerCase() === s.toLowerCase());
+  if (!catMatch && !storeMatch) return false;
+  if (activeStore === "all") return true;
+  return (d.store||"").toLowerCase() === activeStore.toLowerCase();
 }
 
-// Hide items over $1000 unless discount is 30%+
+// Hide items >$1000 unless 30%+ off
 function passesPrice(d) {
-  const combined = [(d.title||""),(d.price||""),(d.discount||"")].join(" ");
-  const pm = combined.replace(/,/g,"").match(/\$(\d+)/g);
-  if (!pm) return true;
-  const maxPrice = Math.max(...pm.map(p => parseInt(p.replace("$",""))));
-  if (maxPrice < 1000) return true;
-  const dm = combined.match(/(\d+)%/);
+  const txt = [(d.title||""),(d.price||""),(d.discount||"")].join(" ").replace(/,/g,"");
+  const prices = txt.match(/\$(\d+)/g);
+  if (!prices) return true;
+  const max = Math.max(...prices.map(p => parseInt(p.slice(1))));
+  if (max < 1000) return true;
+  const dm = txt.match(/(\d+)%/);
   return dm ? parseInt(dm[1]) >= 30 : false;
 }
 
@@ -373,33 +345,29 @@ function timeAgo(d) {
   if (s < 86400) return Math.floor(s/3600) + "h ago";
   return Math.floor(s/86400) + "d ago";
 }
-
 function discNum(d) {
   const m = [(d.discount||""),(d.title||"")].join(" ").match(/(\d+)%/);
   return m ? parseInt(m[1]) : 0;
 }
+function sc(store) { return "sbadge " + (STORE_CLASS[store] || "s-default"); }
 
-function storeClass(store) { return "sbadge " + (STORE_CLASS[store] || "s-default"); }
-
+// ── Card HTML ──────────────────────────────────────────────────────────────
 function cardHtml(d) {
-  const free   = /\bfree\b/i.test(d.title||"");
-  const pct    = discNum(d);
-  const isHot  = pct >= 40;
-  const label  = free ? "FREE" : (d.store || "Deal");
+  const free  = /\bfree\b/i.test(d.title||"");
+  const pct   = discNum(d);
+  const isHot = pct >= 40;
+  const lbl   = d.store || "Deal";
 
-  const imgHtml = d.image_url
+  const img = d.image_url
     ? `<img class="card-img" src="${d.image_url}" alt="" loading="lazy"
-         onerror="this.parentNode.innerHTML='<div class=\\'img-placeholder\\'><span class=\\'store-initial\\'>${label.slice(0,5)}</span></div>'">`
-    : `<div class="img-placeholder"><span class="store-initial">${label.slice(0,5)}</span></div>`;
+         onerror="this.parentNode.innerHTML='<div class=\\'img-ph\\'><span class=\\'img-ph-text\\'>${lbl.slice(0,6)}</span></div>'">`
+    : `<div class="img-ph"><span class="img-ph-text">${lbl.slice(0,6)}</span></div>`;
 
-  const topBadge = free
-    ? `<span class="badge-free">★ FREE</span>`
-    : isHot ? `<span class="badge-hot">🔥 Hot deal</span>` : "";
+  const topBadge = free ? `<span class="badge-free">★ FREE</span>`
+    : isHot        ? `<span class="badge-hot">🔥 Hot</span>` : "";
+  const pctBadge = pct >= 5 ? `<span class="badge-pct">${pct}% OFF</span>` : "";
 
-  const offBadge = pct >= 5
-    ? `<span class="badge-off">${pct}% OFF</span>` : "";
-
-  const priceRow = (d.price || d.discount)
+  const priceHtml = (d.price || d.discount)
     ? `<div class="price-row">
         ${d.price    ? `<span class="price">${d.price}</span>` : ""}
         ${d.discount ? `<span class="savings">${d.discount}</span>` : ""}
@@ -408,21 +376,19 @@ function cardHtml(d) {
   return `
     <a class="card" href="${d.url||"#"}" target="_blank" rel="noopener noreferrer">
       <div class="img-wrap">
-        ${imgHtml}
-        ${topBadge}
-        ${offBadge}
+        ${img}${topBadge}${pctBadge}
       </div>
-      <div class="body">
-        <div class="body-top">
-          <span class="${storeClass(d.store)}">${d.store||"Deal"}</span>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="${sc(d.store)}">${d.store||"Deal"}</span>
           <span class="card-time">${timeAgo(d.posted_at)}</span>
         </div>
         <p class="card-title">${d.title||""}</p>
         ${d.description ? `<p class="card-desc">${d.description}</p>` : ""}
-        ${priceRow}
+        ${priceHtml}
         <div class="card-foot">
           <span class="via">via ${d.source||"community"}</span>
-          <span class="view">View →</span>
+          <span class="view-link">See deal →</span>
         </div>
       </div>
     </a>`;
@@ -432,48 +398,52 @@ function cardHtml(d) {
 async function loadDeals() {
   document.getElementById("grid").innerHTML = '<div class="state"><div class="spinner"></div></div>';
 
-  // Guard: keys not set yet
   if (SUPABASE_URL === "YOUR_SUPABASE_URL") {
-    document.getElementById("grid").innerHTML = `
-      <div class="state"><div class="err-box">
-        <strong>⚠️ Supabase not connected yet</strong>
-        <p>In this file, replace:<br><br>
-        <code>YOUR_SUPABASE_URL</code> with your Project URL<br>
-        <code>YOUR_SUPABASE_ANON_KEY</code> with your anon key<br><br>
-        Find both at: Supabase → Project Settings → API tab</p>
-      </div></div>`;
+    document.getElementById("grid").innerHTML = `<div class="state"><div class="err-box">
+      <strong>⚠️ Connect Supabase to see deals</strong>
+      <p>In <code>index.html</code>, replace:<br><br>
+      <code>YOUR_SUPABASE_URL</code> → your Project URL<br>
+      <code>YOUR_SUPABASE_ANON_KEY</code> → your anon key<br><br>
+      Both are at: Supabase → Project Settings → API tab</p>
+    </div></div>`;
     return;
   }
+
+  const sort = document.getElementById("sortSelect").value;
 
   const { data, error } = await sb
     .from("deals")
     .select("*")
     .order("posted_at", { ascending: false })
-    .limit(200);
+    .limit(300);
 
   document.getElementById("lastUpdated").textContent =
     "Updated " + new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
 
   if (error) {
-    document.getElementById("grid").innerHTML = `
-      <div class="state"><div class="err-box">
-        <strong>⚠️ Could not load deals</strong>
-        <p>${error.message}<br><br>
-        Check your Supabase URL and anon key are correct.</p>
-      </div></div>`;
+    document.getElementById("grid").innerHTML = `<div class="state"><div class="err-box">
+      <strong>⚠️ Could not load deals</strong>
+      <p>${error.message}<br><br>Check your Supabase URL and anon key.</p>
+    </div></div>`;
     return;
   }
 
-  const filtered = (data||[]).filter(d => matchesCat(d) && passesPrice(d));
-  document.getElementById("dealCount").textContent =
-    filtered.length + " deal" + (filtered.length !== 1 ? "s" : "");
+  let filtered = (data||[]).filter(d => matchesCat(d) && passesPrice(d));
 
-  if (!filtered.length) {
-    document.getElementById("grid").innerHTML = `
-      <div class="state">
-        <p style="font-size:15px;font-weight:600;margin-bottom:6px">No deals yet in this category</p>
-        <p style="font-size:13px;color:var(--muted)">The fetcher runs every hour — check back soon, or submit one below.</p>
-      </div>`;
+  // Sort
+  if (sort === "discount") {
+    filtered.sort((a,b) => discNum(b) - discNum(a));
+  }
+
+  const count = filtered.length;
+  document.getElementById("dealCount").textContent =
+    count + " deal" + (count !== 1 ? "s" : "");
+
+  if (!count) {
+    document.getElementById("grid").innerHTML = `<div class="state">
+      <p style="font-size:15px;font-weight:600;margin-bottom:8px">No deals yet in this section</p>
+      <p style="font-size:13px;color:var(--muted)">The fetcher runs every hour and will populate this soon.<br>Or submit one using the form below!</p>
+    </div>`;
     return;
   }
 
@@ -491,12 +461,12 @@ async function submitDeal() {
     title, url,
     description: document.getElementById("sDesc").value,
     image_url:   document.getElementById("sImg").value || null,
-    category:    document.getElementById("sCat").value || "other",
+    category:    document.getElementById("sCat").value || "general",
     source: "submitted", store: "Other",
     is_approved: true, posted_at: new Date().toISOString(),
   });
   if (error) { msg.textContent = "Error: " + error.message; return; }
-  msg.textContent = "✓ Submitted! It'll appear shortly.";
+  msg.textContent = "✓ Thank you! Your deal is live.";
   ["sTitle","sDesc","sUrl","sImg"].forEach(id => document.getElementById(id).value = "");
   setTimeout(loadDeals, 1500);
 }
