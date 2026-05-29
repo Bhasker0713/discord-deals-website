@@ -258,7 +258,7 @@
 <script>
 // ── CONFIG ──────────────────────────────────────────────────────────────────
 const SUPABASE_URL = "https://lfghsqbldpyodnenpbnu.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmZ2hzcWJsZHB5b2RuZW5wYm51Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NTIxMjIsImV4cCI6MjA5NTAyODEyMn0.xGrz9zs8R_b3GESuDfcAoG5P1IjxDphdAv6e0bx8NOQ";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmZ2hzcWJsZHB5b2RuZW5wYm51Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NTIxMjIsImV4cCI6MjA5NTAyODEyMn0.xGrz9zs8R_b3GESuDfcAoG5P1IjxDphdAv6e0bx8NOQ";
 // ────────────────────────────────────────────────────────────────────────────
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -427,8 +427,6 @@ function cardHtml(d) {
   const store  = normaliseStore(d.store);
   const cfg    = STORE_CFG[store] || { cls:"s-other", icon:"🏷️" };
   const pct    = discNum(d);
-  const isHot  = (d.hot_score||0) >= 40;
-
   const genuinelyFree = isTrulyFree(d.title||"");
   const isHot  = !genuinelyFree && (d.hot_score||0) >= 40;
 
