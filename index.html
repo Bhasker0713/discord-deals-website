@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Save Your Dollar — Best Deals Today</title>
-  <meta name="description" content="Best daily deals from Amazon, Walmart, Costco, Target, Home Depot, Lowe's, Best Buy, eBay and more."/>
+  <title>Save Your Dollar — Best Amazon Deals & More</title>
+  <meta name="description" content="Best Amazon deals, price drops and daily discounts across Tech, Food and Retail — updated daily."/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
       --green:#1d7a45;--green-lt:#eaf5ef;
-      --red:#c92000;--red-lt:#fff1ee;--gold:#f5a200;
+      --red:#c92000;--red-lt:#fff1ee;
+      --gold:#f5a200;--amazon:#ff9900;--amazon-lt:#fff8ee;
       --bg:#f5f4f0;--surface:#fff;--border:#e6e3dc;
       --text:#1b1b18;--muted:#86837c;--radius:10px;
     }
@@ -22,25 +23,34 @@
     .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
     .logo-text{font-size:1.2rem;font-weight:800;color:#fff;letter-spacing:-.03em}
     .logo-dot{color:var(--gold)}
-    .header-right{display:flex;align-items:center;gap:12px}
-    .header-meta{font-size:11px;color:rgba(255,255,255,.55)}
+    .header-meta{font-size:11px;color:rgba(255,255,255,.6)}
 
-    /* ── Retailer tab bar ── */
+    /* ── Tab bar ── */
     .tabbar{background:var(--surface);border-bottom:1px solid var(--border);
-      display:flex;align-items:center;padding:0;
-      overflow-x:auto;scrollbar-width:none;height:54px}
+      display:flex;align-items:center;padding:0;overflow-x:auto;scrollbar-width:none;height:52px}
     .tabbar::-webkit-scrollbar{display:none}
-    .tab{flex-shrink:0;display:flex;align-items:center;gap:7px;
-      padding:0 18px;height:100%;font-size:13px;font-weight:600;
-      border:none;background:transparent;color:var(--muted);
-      cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;
-      transition:all .12s}
+    .tab{flex-shrink:0;display:flex;align-items:center;gap:7px;padding:0 20px;
+      height:100%;font-size:13px;font-weight:600;border:none;background:transparent;
+      color:var(--muted);cursor:pointer;white-space:nowrap;
+      border-bottom:3px solid transparent;transition:all .12s}
     .tab:hover{color:var(--text);background:var(--bg)}
-    .tab.active{color:var(--green);border-bottom-color:var(--green);background:transparent}
-    .tab .tab-icon{font-size:16px}
-    .tab .tab-count{font-size:10px;font-weight:700;background:var(--bg);
-      color:var(--muted);padding:1px 6px;border-radius:20px;border:1px solid var(--border)}
+    .tab.active{color:var(--green);border-bottom-color:var(--green)}
+    .tab.amazon-tab.active{color:var(--amazon);border-bottom-color:var(--amazon)}
+    .tab-count{font-size:10px;font-weight:700;background:var(--bg);color:var(--muted);
+      padding:1px 6px;border-radius:20px;border:1px solid var(--border)}
     .tab.active .tab-count{background:var(--green-lt);color:var(--green);border-color:var(--green)}
+    .tab.amazon-tab.active .tab-count{background:var(--amazon-lt);color:var(--amazon);border-color:#ffcc88}
+
+    /* ── Category pills (for All Deals) ── */
+    .catbar{background:var(--bg);border-bottom:1px solid var(--border);
+      display:flex;align-items:center;gap:6px;padding:8px 1.5rem;
+      overflow-x:auto;scrollbar-width:none}
+    .catbar::-webkit-scrollbar{display:none}
+    .cat-pill{flex-shrink:0;padding:5px 14px;border-radius:20px;font-size:12px;
+      font-weight:600;border:1.5px solid var(--border);background:var(--surface);
+      color:var(--muted);cursor:pointer;transition:all .12s}
+    .cat-pill:hover{color:var(--text);border-color:#bbb}
+    .cat-pill.active{border-color:var(--green);color:var(--green);background:var(--green-lt)}
 
     /* ── Hot strip ── */
     .hot-strip{background:linear-gradient(90deg,#9b0000,var(--red));
@@ -49,6 +59,18 @@
     .hot-strip.on{display:flex}
     .hot-strip strong{color:#fff;white-space:nowrap;flex-shrink:0}
     .hot-ticker{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+    /* ── Amazon hero banner ── */
+    .amazon-banner{background:linear-gradient(135deg,#232f3e,#37475a);
+      padding:16px 1.5rem;display:none;align-items:center;gap:14px}
+    .amazon-banner.on{display:flex}
+    .amazon-logo{font-size:22px;font-weight:900;color:var(--amazon);letter-spacing:-.02em}
+    .amazon-logo span{color:#fff}
+    .amazon-banner-text{font-size:13px;color:rgba(255,255,255,.8);line-height:1.5}
+    .amazon-banner-text strong{color:#fff}
+    .affiliate-badge{margin-left:auto;flex-shrink:0;font-size:10px;font-weight:700;
+      background:rgba(255,153,0,.15);color:var(--amazon);border:1px solid rgba(255,153,0,.3);
+      padding:3px 9px;border-radius:20px;white-space:nowrap}
 
     /* ── Container ── */
     .container{max-width:1280px;margin:0 auto;padding:1.25rem 1.5rem}
@@ -64,8 +86,15 @@
       cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap}
     .refresh-btn:hover{border-color:#aaa;color:var(--text)}
 
+    /* ── Category section headers (All Deals view) ── */
+    .section-header{display:flex;align-items:center;gap:10px;
+      margin:1.5rem 0 0.75rem;padding-bottom:8px;border-bottom:2px solid var(--border)}
+    .section-header h2{font-size:15px;font-weight:700;color:var(--text)}
+    .section-header .section-count{font-size:11px;color:var(--muted);
+      background:var(--bg);padding:2px 8px;border-radius:20px;border:1px solid var(--border)}
+
     /* ── Grid ── */
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:14px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
 
     /* ── Card ── */
     .card{background:var(--surface);border:1px solid var(--border);
@@ -73,26 +102,28 @@
       text-decoration:none;color:inherit;
       transition:border-color .15s,box-shadow .15s,transform .1s}
     .card:hover{border-color:#c5c2bb;box-shadow:0 2px 14px rgba(0,0,0,.07);transform:translateY(-1px)}
+    .card.amazon-card{border-color:#ffd8a0}
+    .card.amazon-card:hover{border-color:var(--amazon);box-shadow:0 2px 14px rgba(255,153,0,.15)}
 
     .img-wrap{position:relative;flex-shrink:0}
     .card-img{width:100%;height:165px;object-fit:cover;display:block;background:var(--bg)}
     .img-ph{width:100%;height:165px;display:flex;flex-direction:column;align-items:center;
       justify-content:center;gap:8px;background:linear-gradient(135deg,#f0ede6,#e8e4dc)}
-    .img-ph-icon{font-size:36px;opacity:.3}
+    .img-ph-icon{font-size:36px;opacity:.25}
     .img-ph-name{font-size:10px;font-weight:700;opacity:.3;letter-spacing:.1em;text-transform:uppercase}
 
-    /* FREE badge — only shown when item is genuinely free */
     .badge-free{position:absolute;top:8px;left:8px;background:var(--gold);color:#3a1f00;
       font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;letter-spacing:.05em}
     .badge-hot{position:absolute;top:8px;left:8px;background:var(--red);color:#fff;
       font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px}
     .badge-pct{position:absolute;top:8px;right:8px;background:var(--surface);color:var(--red);
       font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;border:1px solid var(--border)}
+    .badge-amazon{position:absolute;bottom:8px;right:8px;background:#232f3e;color:var(--amazon);
+      font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;letter-spacing:.04em}
 
     .card-body{padding:12px 14px;flex:1;display:flex;flex-direction:column;gap:6px}
     .card-top{display:flex;align-items:center;justify-content:space-between}
 
-    /* Store badge — coloured per retailer */
     .sbadge{font-size:10px;font-weight:700;letter-spacing:.03em;padding:2px 8px;
       border-radius:20px;text-transform:uppercase;flex-shrink:0}
     .s-amazon   {background:#fff4d4;color:#a05000}
@@ -103,6 +134,9 @@
     .s-lowes    {background:#e0ecff;color:#0044a8}
     .s-bestbuy  {background:#e8e8ff;color:#1515aa}
     .s-ebay     {background:#fff8e0;color:#86400a}
+    .s-tech     {background:#eeeeff;color:#333399}
+    .s-food     {background:#eeffee;color:#116611}
+    .s-retail   {background:#fff0ee;color:#993322}
     .s-other    {background:#f2f0ec;color:#66635d}
 
     .card-time{font-size:11px;color:var(--muted);white-space:nowrap}
@@ -113,6 +147,7 @@
 
     .price-row{display:flex;align-items:center;gap:8px;margin-top:2px}
     .price{font-size:18px;font-weight:700;color:var(--green)}
+    .was-price{font-size:12px;color:#bbb;text-decoration:line-through}
     .savings{font-size:11px;font-weight:700;color:var(--red);
       background:var(--red-lt);padding:2px 6px;border-radius:4px}
 
@@ -120,6 +155,7 @@
       border-top:1px solid var(--border);padding-top:8px;margin-top:auto}
     .via{font-size:11px;color:#c0bdb6}
     .view-link{font-size:12px;font-weight:700;color:var(--green)}
+    .view-link.amazon-link{color:var(--amazon)}
 
     /* ── States ── */
     .state{grid-column:1/-1;text-align:center;padding:4rem 1.5rem}
@@ -127,14 +163,12 @@
       border-top-color:var(--green);border-radius:50%;
       animation:spin .7s linear infinite;margin:0 auto 1rem}
     @keyframes spin{to{transform:rotate(360deg)}}
-
     .err-box{display:inline-block;background:var(--red-lt);border:1px solid #ffb3a3;
       border-radius:var(--radius);padding:1.25rem 1.5rem;text-align:left;max-width:480px}
     .err-box strong{display:block;margin-bottom:8px;font-size:14px}
     .err-box p{font-size:13px;color:var(--muted);line-height:1.7}
     .err-box code{background:#ffd6cc;padding:2px 5px;border-radius:3px;font-size:12px}
-
-    .empty-state{grid-column:1/-1;text-align:center;padding:4rem 1.5rem}
+    .empty-state{grid-column:1/-1;text-align:center;padding:3rem 1.5rem}
     .empty-state h3{font-size:15px;font-weight:600;margin-bottom:8px}
     .empty-state p{font-size:13px;color:var(--muted);line-height:1.6;max-width:400px;margin:0 auto}
 
@@ -155,17 +189,20 @@
     .sub-btn:hover{opacity:.88}
     .sub-msg{font-size:12px;color:var(--muted);text-align:center;min-height:16px}
 
-    footer{text-align:center;padding:2rem 1rem;font-size:12px;color:#bbb;
-      border-top:1px solid var(--border);margin-top:1rem}
+    /* ── Disclaimer ── */
+    .disclaimer{font-size:11px;color:#bbb;text-align:center;
+      padding:1rem 1.5rem 0;line-height:1.6;max-width:700px;margin:0 auto}
 
-    @media(max-width:700px){
-      .tab{padding:0 12px;font-size:12px}
-      .tab .tab-icon{display:none}
-    }
+    footer{text-align:center;padding:1.5rem 1rem 2rem;font-size:12px;color:#bbb;
+      border-top:1px solid var(--border);margin-top:1.5rem}
+
+    @media(max-width:700px){.tab{padding:0 12px}}
     @media(max-width:600px){
       .container{padding:1rem}
       .grid{grid-template-columns:repeat(2,1fr);gap:10px}
       .card-img,.img-ph{height:120px}
+      .amazon-banner{flex-wrap:wrap}
+      .affiliate-badge{margin-left:0}
     }
     @media(max-width:360px){.grid{grid-template-columns:1fr}}
   </style>
@@ -177,23 +214,35 @@
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
     <span class="logo-text">Save Your<span class="logo-dot">Dollar</span></span>
   </a>
-  <div class="header-right">
-    <div class="header-meta" id="lastUpdated">Loading…</div>
-  </div>
+  <div class="header-meta" id="lastUpdated">Loading…</div>
 </header>
 
-<!-- Retailer tabs -->
-<div class="tabbar" id="tabbar">
-  <button class="tab active" data-store="all"        onclick="setTab(this)"><span class="tab-icon">🏷️</span> All Deals <span class="tab-count" id="cnt-all">…</span></button>
-  <button class="tab"        data-store="Amazon"      onclick="setTab(this)"><span class="tab-icon">📦</span> Amazon <span class="tab-count" id="cnt-Amazon">…</span></button>
-  <button class="tab"        data-store="Walmart"     onclick="setTab(this)"><span class="tab-icon">🛒</span> Walmart <span class="tab-count" id="cnt-Walmart">…</span></button>
-  <button class="tab"        data-store="Costco"      onclick="setTab(this)"><span class="tab-icon">🏪</span> Costco <span class="tab-count" id="cnt-Costco">…</span></button>
-  <button class="tab"        data-store="Target"      onclick="setTab(this)"><span class="tab-icon">🎯</span> Target <span class="tab-count" id="cnt-Target">…</span></button>
-  <button class="tab"        data-store="Home Depot"  onclick="setTab(this)"><span class="tab-icon">🔨</span> Home Depot <span class="tab-count" id="cnt-HomeDepot">…</span></button>
-  <button class="tab"        data-store="Lowe's"      onclick="setTab(this)"><span class="tab-icon">🔧</span> Lowe's <span class="tab-count" id="cnt-Lowes">…</span></button>
-  <button class="tab"        data-store="Best Buy"    onclick="setTab(this)"><span class="tab-icon">💻</span> Best Buy <span class="tab-count" id="cnt-BestBuy">…</span></button>
-  <button class="tab"        data-store="eBay"        onclick="setTab(this)"><span class="tab-icon">🔖</span> eBay <span class="tab-count" id="cnt-eBay">…</span></button>
-  <button class="tab"        data-store="Other"       onclick="setTab(this)"><span class="tab-icon">➕</span> Other Deals <span class="tab-count" id="cnt-Other">…</span></button>
+<!-- Main tabs -->
+<div class="tabbar">
+  <button class="tab amazon-tab active" data-view="amazon" onclick="setView(this)">
+    📦 Amazon Deals <span class="tab-count" id="cnt-amazon">…</span>
+  </button>
+  <button class="tab" data-view="all" onclick="setView(this)">
+    🏷️ All Other Deals <span class="tab-count" id="cnt-all">…</span>
+  </button>
+</div>
+
+<!-- Category pills — only shown on All Deals view -->
+<div class="catbar" id="catbar" style="display:none">
+  <button class="cat-pill active" data-cat="all"    onclick="setCat(this)">All</button>
+  <button class="cat-pill"        data-cat="tech"   onclick="setCat(this)">💻 Tech</button>
+  <button class="cat-pill"        data-cat="food"   onclick="setCat(this)">🍔 Food & Drinks</button>
+  <button class="cat-pill"        data-cat="retail" onclick="setCat(this)">🛍️ Retail</button>
+</div>
+
+<!-- Amazon affiliate banner — shown on Amazon tab -->
+<div class="amazon-banner" id="amazonBanner">
+  <div class="amazon-logo">amazon<span>.com</span></div>
+  <div class="amazon-banner-text">
+    <strong>Live Amazon price drops</strong> — updated daily from Amazon's own price tracking.
+    All links include our affiliate tag so every purchase supports this site.
+  </div>
+  <span class="affiliate-badge">✓ Affiliate partner</span>
 </div>
 
 <!-- Hot strip -->
@@ -219,37 +268,36 @@
     </div>
   </div>
 
-  <div class="grid" id="grid">
-    <div class="state"><div class="spinner"></div></div>
-  </div>
+  <div id="mainContent"></div>
 
-  <!-- Submit a deal -->
+  <!-- Submit -->
   <div class="submit-wrap">
     <div class="submit-card">
       <h2>Found a deal?</h2>
-      <p>Share a direct link from any store — it appears on the site instantly.</p>
+      <p>Share a direct Amazon or retailer link — it appears instantly.</p>
       <div class="fields">
         <input   id="sTitle" type="text" placeholder="Deal title *"/>
-        <textarea id="sDesc" placeholder="Details — promo code, expiry, how to claim…" rows="2"></textarea>
-        <input   id="sUrl"   type="url"  placeholder="Direct retailer link *"/>
+        <textarea id="sDesc" placeholder="Details — how to claim, expiry, promo code…" rows="2"></textarea>
+        <input   id="sUrl"   type="url"  placeholder="Direct product link *"/>
         <input   id="sImg"   type="url"  placeholder="Product image URL (optional)"/>
         <select id="sStore">
-          <option value="Other">Select retailer</option>
-          <option>Amazon</option>
-          <option>Walmart</option>
-          <option>Costco</option>
-          <option>Target</option>
-          <option>Home Depot</option>
-          <option>Lowe's</option>
-          <option>Best Buy</option>
-          <option>eBay</option>
-          <option value="Other">Other</option>
+          <option value="Amazon">Amazon</option>
+          <option value="Walmart">Walmart</option>
+          <option value="Target">Target</option>
+          <option value="Best Buy">Best Buy</option>
+          <option value="Other">Other retailer</option>
         </select>
         <button class="sub-btn" onclick="submitDeal()">Submit deal →</button>
         <p class="sub-msg" id="subMsg"></p>
       </div>
     </div>
   </div>
+
+  <p class="disclaimer">
+    * SaveYourDollar.com is a participant in the Amazon Associates Program, an affiliate advertising
+    program designed to provide a means for sites to earn advertising fees by advertising and linking
+    to Amazon.com. As an Amazon Associate we earn from qualifying purchases.
+  </p>
 </div>
 
 <footer>© 2025 SaveYourDollar.com · Deals refreshed daily</footer>
@@ -262,305 +310,317 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 // ────────────────────────────────────────────────────────────────────────────
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const AMAZON_TAG = "dollarsaver25-20";
 
-// The 8 retailers we show. Anything else goes to "Other"
-const MAIN_STORES = ["Amazon","Walmart","Costco","Target","Home Depot","Lowe's","Best Buy","eBay"];
-
-// Store display config
-const STORE_CFG = {
-  "Amazon":     { cls:"s-amazon",    icon:"📦" },
-  "Walmart":    { cls:"s-walmart",   icon:"🛒" },
-  "Costco":     { cls:"s-costco",    icon:"🏪" },
-  "Target":     { cls:"s-target",    icon:"🎯" },
-  "Home Depot": { cls:"s-homedepot", icon:"🔨" },
-  "Lowe's":     { cls:"s-lowes",     icon:"🔧" },
-  "Best Buy":   { cls:"s-bestbuy",   icon:"💻" },
-  "eBay":       { cls:"s-ebay",      icon:"🔖" },
+// Category mapping for "All Deals" view
+const CAT_KEYWORDS = {
+  tech:   ["amazon","best buy","laptop","phone","tv","monitor","tablet","ipad","iphone",
+            "samsung","gaming","console","headphone","speaker","camera","cpu","gpu","router"],
+  food:   ["starbucks","mcdonald","chick-fil","dunkin","subway","pizza","coffee","burger",
+            "restaurant","food","meal","drink","grocery","aldi","kroger"],
+  retail: ["walmart","target","costco","home depot","lowe","gap","old navy","kohl","ebay",
+            "macy","nordstrom","nike","adidas","clothing","apparel","tool","hardware"],
 };
 
-// Words that flag a deal as junk — skip entirely
+// Skip keywords — no books
 const SKIP = ["book","kindle","audible","novel","paperback","hardcover",
   "ebook","audiobook","manga","comic","textbook"];
 
-// ── Free deal detection ────────────────────────────────────────────────────
-// Step 1: does the title mention "free" in a shipping/logistics context only?
-const SHIP_PATTERNS = [
-  /free\s+(shipping|s&h|s\/h|delivery|ship|returns|return|pickup|store\s+pickup)/i,
-  /\+\s*free\s+(ship|delivery)/i,
-  /ships?\s+free\b/i,
-  /free\s+ship(ping)?\s+(on|with|over|for)/i,
-  /free\s+2[-–]day/i,
-  /free\s+next[-–]day/i,
-];
+// Free shipping patterns — don't badge as free
+const SHIP_PAT = [/free\s+(shipping|s&h|delivery|ship|returns)/i,/ships?\s+free/i];
+const FREE_PAT = [/\bfree\s+after\s+rebate/i,/100%\s*off/i,/\$0\.00/,
+  /\bfree\s+(item|product|sample|gift)\b/i,/\bfree\s+with\s+purchase/i];
 
-// Step 2: does the title indicate the ITEM ITSELF is free?
-const TRULY_FREE_PATTERNS = [
-  /\bfree\s+after\s+(mail[-\s]?in\s+)?rebate/i,    // free after rebate
-  /\bfree\s+after\s+coupon/i,                       // free after coupon
-  /\bfree\s+(item|product|sample|gift|toy)\b/i,     // free item/product/sample
-  /\bget\s+.{1,25}\bfor\s+free\b/i,                 // get X for free
-  /\bfree\b.{1,30}\bwyb\b/i,                        // free wyb (with your buy)
-  /100%\s*off\b/i,                                  // 100% off
-  /\$0\.00\b/,                                      // priced at $0.00
-  /\bpenny\s+(deal|item|price)\b/i,                 // penny deal
-  /\bfree\s+with\s+(purchase|subscription|prime)\b/i, // free with purchase
-  /\bcompletely\s+free\b/i,
-  /\bentirely\s+free\b/i,
-];
-
-function isTrulyFree(title="") {
-  const t = title || "";
-  const hasShipping = SHIP_PATTERNS.some(p => p.test(t));
-  const hasTrulyFree = TRULY_FREE_PATTERNS.some(p => p.test(t));
-
-  if (hasTrulyFree) return true;  // explicitly an item being given free
-
-  // If "free" appears but ONLY in a shipping context — not truly free
-  if (hasShipping && !hasTrulyFree) return false;
-
-  return false; // default: don't badge as free unless we're certain
+function isTrulyFree(t=""){
+  if(FREE_PAT.some(p=>p.test(t))) return true;
+  if(SHIP_PAT.some(p=>p.test(t))) return false;
+  return false;
+}
+function isShipOnly(t=""){
+  return SHIP_PAT.some(p=>p.test(t)) &&
+    !/\d+%\s*off|\$\d+\s*off|save\s+\$/i.test(t) && !isTrulyFree(t);
 }
 
-function isShippingOnlyDeal(title="") {
-  const t = title || "";
-  // Hide the deal entirely only if the ENTIRE VALUE is just free shipping
-  // i.e. "Free shipping on orders over $35" type titles with no actual discount
-  const onlyShip = SHIP_PATTERNS.some(p => p.test(t));
-  const hasDiscount = /\d+%\s*off|\$\d+\s*off|save\s+\$|was\s+\$|now\s+\$/i.test(t);
-  const hasTrulyFree = isTrulyFree(t);
-  // Only hide if it mentions free shipping AND has no real deal info
-  return onlyShip && !hasDiscount && !hasTrulyFree;
+// Ensure all Amazon URLs have affiliate tag
+function tagAmazon(url=""){
+  if(!url||!url.includes("amazon.com")) return url;
+  try{
+    const u=new URL(url);
+    u.searchParams.set("tag",AMAZON_TAG);
+    return u.toString();
+  }catch{
+    return url+(url.includes("?")?"&":"?")+"tag="+AMAZON_TAG;
+  }
 }
 
-let allDeals = [];
-let activeStore = "all";
+let allDeals=[], activeView="amazon", activeCat="all";
 
-// ── Tab switching ──────────────────────────────────────────────────────────
-function setTab(btn) {
-  document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+function setView(btn){
+  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
-  activeStore = btn.dataset.store;
+  activeView=btn.dataset.view; activeCat="all";
+  // Show/hide elements
+  document.getElementById("catbar").style.display=activeView==="all"?"flex":"none";
+  document.getElementById("amazonBanner").classList.toggle("on",activeView==="amazon");
+  // Reset cat pills
+  document.querySelectorAll(".cat-pill").forEach(p=>p.classList.remove("active"));
+  document.querySelector(".cat-pill[data-cat='all']").classList.add("active");
   renderDeals();
 }
 
-// ── Filter logic ───────────────────────────────────────────────────────────
-function normaliseStore(store="") {
-  // Map anything not in MAIN_STORES to "Other"
-  return MAIN_STORES.includes(store) ? store : "Other";
+function setCat(btn){
+  document.querySelectorAll(".cat-pill").forEach(p=>p.classList.remove("active"));
+  btn.classList.add("active");
+  activeCat=btn.dataset.cat;
+  renderDeals();
 }
 
-function shouldSkip(d) {
-  const t = d.title || "";
-  if (SKIP.some(w => t.toLowerCase().includes(w))) return true;
-  if (isShippingOnlyDeal(t)) return true;
-  return false;
+function shouldSkip(d){
+  return SKIP.some(w=>(d.title||"").toLowerCase().includes(w))||isShipOnly(d.title||"");
 }
 
-function filterDeals(deals) {
-  return deals.filter(d => {
-    if (shouldSkip(d)) return false;
-    const store = normaliseStore(d.store);
-    if (activeStore === "all")   return true;
-    if (activeStore === "Other") return store === "Other";
-    return store === activeStore;
+function getCategory(d){
+  const t=((d.title||"")+" "+(d.store||"")).toLowerCase();
+  for(const[cat,keys] of Object.entries(CAT_KEYWORDS)){
+    if(keys.some(k=>t.includes(k))) return cat;
+  }
+  return "retail";
+}
+
+function filterDeals(deals){
+  return deals.filter(d=>{
+    if(shouldSkip(d)) return false;
+    const isAmazon=(d.store||"").toLowerCase()==="amazon"||
+                   (d.source||"").toLowerCase()==="amazon"||
+                   (d.url||"").includes("amazon.com");
+    if(activeView==="amazon") return isAmazon;
+    // All Deals = non-Amazon only
+    if(isAmazon) return false;
+    if(activeCat==="all") return true;
+    return getCategory(d)===activeCat;
   });
 }
 
-// Hide items >$1000 unless 30%+ off
-function passesPrice(d) {
-  const txt = [(d.title||""),(d.price||""),(d.discount||"")].join(" ").replace(/,/g,"");
-  const prices = txt.match(/\$(\d+)/g);
-  if (!prices) return true;
-  const max = Math.max(...prices.map(p=>parseInt(p.slice(1))));
-  if (max < 1000) return true;
-  const dm = txt.match(/(\d+)%/);
-  return dm ? parseInt(dm[1]) >= 30 : false;
+function passesPrice(d){
+  const txt=[(d.title||""),(d.price||""),(d.discount||"")].join(" ").replace(/,/g,"");
+  const prices=txt.match(/\$(\d+)/g);
+  if(!prices) return true;
+  const max=Math.max(...prices.map(p=>parseInt(p.slice(1))));
+  if(max<1000) return true;
+  const dm=txt.match(/(\d+)%/);
+  return dm?parseInt(dm[1])>=30:false;
 }
 
-// ── Sorting ────────────────────────────────────────────────────────────────
-function discNum(d) {
-  const m = [(d.discount||""),(d.title||"")].join(" ").match(/(\d+)%/);
-  return m ? parseInt(m[1]) : 0;
+function discNum(d){
+  const m=[(d.discount||""),(d.title||"")].join(" ").match(/(\d+)%/);
+  return m?parseInt(m[1]):0;
 }
 
-function sortDeals(arr, method) {
-  const c = [...arr];
-  if (method==="hot")      return c.sort((a,b)=>(b.hot_score||0)-(a.hot_score||0));
-  if (method==="newest")   return c.sort((a,b)=>new Date(b.posted_at)-new Date(a.posted_at));
-  if (method==="discount") return c.sort((a,b)=>discNum(b)-discNum(a));
+function timeAgo(d){
+  const s=Math.floor((Date.now()-new Date(d))/1000);
+  if(s<60) return "just now";
+  if(s<3600) return Math.floor(s/60)+"m ago";
+  if(s<86400) return Math.floor(s/3600)+"h ago";
+  return Math.floor(s/86400)+"d ago";
+}
+
+function sortDeals(arr,method){
+  const c=[...arr];
+  if(method==="hot")      return c.sort((a,b)=>(b.hot_score||0)-(a.hot_score||0));
+  if(method==="newest")   return c.sort((a,b)=>new Date(b.posted_at)-new Date(a.posted_at));
+  if(method==="discount") return c.sort((a,b)=>discNum(b)-discNum(a));
   return c;
 }
 
-// ── Tab counts ─────────────────────────────────────────────────────────────
-function updateCounts(deals) {
-  const clean = deals.filter(d => !shouldSkip(d) && passesPrice(d));
-  const counts = { all: 0, Other: 0 };
-  MAIN_STORES.forEach(s => counts[s] = 0);
-  clean.forEach(d => {
-    const s = normaliseStore(d.store);
-    counts[s] = (counts[s]||0) + 1;
-    counts.all++;
-  });
-
-  const idMap = {
-    "all":"cnt-all","Amazon":"cnt-Amazon","Walmart":"cnt-Walmart",
-    "Costco":"cnt-Costco","Target":"cnt-Target","Home Depot":"cnt-HomeDepot",
-    "Lowe's":"cnt-Lowes","Best Buy":"cnt-BestBuy","eBay":"cnt-eBay","Other":"cnt-Other"
-  };
-  Object.entries(idMap).forEach(([store, id]) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = counts[store] || 0;
-  });
+function storeClass(store=""){
+  const m={"Amazon":"s-amazon","Walmart":"s-walmart","Costco":"s-costco",
+    "Target":"s-target","Home Depot":"s-homedepot","Lowe's":"s-lowes",
+    "Best Buy":"s-bestbuy","eBay":"s-ebay"};
+  return "sbadge "+(m[store]||"s-other");
 }
 
-// ── Time ago ───────────────────────────────────────────────────────────────
-function timeAgo(d) {
-  const s = Math.floor((Date.now()-new Date(d))/1000);
-  if (s < 60)    return "just now";
-  if (s < 3600)  return Math.floor(s/60)   + "m ago";
-  if (s < 86400) return Math.floor(s/3600) + "h ago";
-  return Math.floor(s/86400) + "d ago";
-}
+function cardHtml(d){
+  const isAmazon=(d.store==="Amazon"||(d.url||"").includes("amazon.com"));
+  const url=isAmazon?tagAmazon(d.url||""):(d.url||"#");
+  const store=d.store||"Other";
+  const free=isTrulyFree(d.title||"");
+  const pct=discNum(d);
+  const isHot=!free&&(d.hot_score||0)>=40;
 
-// ── Card HTML ──────────────────────────────────────────────────────────────
-function cardHtml(d) {
-  const store  = normaliseStore(d.store);
-  const cfg    = STORE_CFG[store] || { cls:"s-other", icon:"🏷️" };
-  const pct    = discNum(d);
-  const genuinelyFree = isTrulyFree(d.title||"");
-  const isHot  = !genuinelyFree && (d.hot_score||0) >= 40;
+  const ICONS={"Amazon":"📦","Walmart":"🛒","Costco":"🏪","Target":"🎯",
+    "Home Depot":"🔨","Lowe's":"🔧","Best Buy":"💻","eBay":"🔖"};
+  const icon=ICONS[store]||"🏷️";
 
-  const img = d.image_url
-    ? `<img class="card-img" src="${d.image_url}" alt="" loading="lazy"
-         onerror="this.parentNode.innerHTML='<div class=\\'img-ph\\'><span class=\\'img-ph-icon\\'>${cfg.icon}</span><span class=\\'img-ph-name\\'>${store}</span></div>'">`
-    : `<div class="img-ph"><span class="img-ph-icon">${cfg.icon}</span><span class="img-ph-name">${store}</span></div>`;
+  const img=d.image_url
+    ?`<img class="card-img" src="${d.image_url}" alt="" loading="lazy"
+        onerror="this.parentNode.innerHTML='<div class=\\'img-ph\\'><span class=\\'img-ph-icon\\'>${icon}</span><span class=\\'img-ph-name\\'>${store}</span></div>'">`
+    :`<div class="img-ph"><span class="img-ph-icon">${icon}</span><span class="img-ph-name">${store}</span></div>`;
 
-  // FREE badge only if item is genuinely free (not just free shipping)
-  const topBadge = genuinelyFree
-    ? `<span class="badge-free">★ FREE</span>`
-    : isHot ? `<span class="badge-hot">🔥 Hot deal</span>` : "";
-  const pctBadge = !genuinelyFree && pct >= 5 ? `<span class="badge-pct">${pct}% OFF</span>` : "";
+  const topBadge=free?`<span class="badge-free">★ FREE</span>`
+    :isHot?`<span class="badge-hot">🔥 Hot</span>`:"";
+  const pctBadge=pct>=5?`<span class="badge-pct">${pct}% OFF</span>`:"";
+  const amazonBadge=isAmazon?`<span class="badge-amazon">AMAZON</span>`:"";
 
-  const priceHtml = (d.price || d.discount) ? `<div class="price-row">
-    ${d.price    ? `<span class="price">${d.price}</span>` : ""}
-    ${d.discount ? `<span class="savings">${d.discount}</span>` : ""}
-  </div>` : "";
+  const priceHtml=(d.price||d.discount)?`<div class="price-row">
+    ${d.price?`<span class="price">${d.price}</span>`:""}
+    ${d.discount?`<span class="savings">${d.discount}</span>`:""}
+  </div>`:"";
 
   return `
-    <a class="card" href="${d.url||"#"}" target="_blank" rel="noopener noreferrer">
-      <div class="img-wrap">${img}${topBadge}${pctBadge}</div>
+    <a class="card ${isAmazon?"amazon-card":""}" href="${url}" target="_blank" rel="noopener noreferrer">
+      <div class="img-wrap">${img}${topBadge}${pctBadge}${amazonBadge}</div>
       <div class="card-body">
         <div class="card-top">
-          <span class="sbadge ${cfg.cls}">${store}</span>
+          <span class="${storeClass(store)}">${store}</span>
           <span class="card-time">${timeAgo(d.posted_at)}</span>
         </div>
         <p class="card-title">${d.title||""}</p>
-        ${d.description ? `<p class="card-desc">${d.description}</p>` : ""}
+        ${d.description?`<p class="card-desc">${d.description}</p>`:""}
         ${priceHtml}
         <div class="card-foot">
           <span class="via">via ${d.source||"community"}</span>
-          <span class="view-link">See deal →</span>
+          <span class="view-link ${isAmazon?"amazon-link":""}">See deal →</span>
         </div>
       </div>
     </a>`;
 }
 
-// ── Render ─────────────────────────────────────────────────────────────────
-function renderDeals() {
-  const method   = document.getElementById("sortSelect").value;
-  let filtered   = filterDeals(allDeals).filter(passesPrice);
-  filtered       = sortDeals(filtered, method);
-
-  document.getElementById("dealCount").textContent =
-    filtered.length + " deal" + (filtered.length!==1?"s":"");
-
-  if (!filtered.length) {
-    const storeName = activeStore === "all" ? "" : activeStore + " ";
-    document.getElementById("grid").innerHTML = `<div class="empty-state">
-      <h3>No ${storeName}deals found yet</h3>
-      <p>The fetcher runs daily at 6 AM. Check back then, or submit one using the form below.</p>
-    </div>`;
-    return;
+// ── Render all deals view with category sections ───────────────────────────
+function renderAllDealsWithSections(deals, method){
+  if(activeCat!=="all"){
+    // Single category — just render grid
+    const sorted=sortDeals(deals,method);
+    document.getElementById("dealCount").textContent=
+      sorted.length+" deal"+(sorted.length!==1?"s":"");
+    if(!sorted.length) return emptyHtml();
+    return `<div class="grid">${sorted.map(cardHtml).join("")}</div>`;
   }
-  document.getElementById("grid").innerHTML = filtered.map(cardHtml).join("");
+
+  // All categories — show sections
+  const sections=[
+    {key:"tech",   label:"💻 Tech",          emoji:"💻"},
+    {key:"food",   label:"🍔 Food & Drinks",  emoji:"🍔"},
+    {key:"retail", label:"🛍️ Retail",         emoji:"🛍️"},
+  ];
+  let html="";
+  let total=0;
+  for(const sec of sections){
+    const items=sortDeals(deals.filter(d=>getCategory(d)===sec.key),method).slice(0,8);
+    if(!items.length) continue;
+    total+=items.length;
+    html+=`<div class="section-header">
+      <h2>${sec.label}</h2>
+      <span class="section-count">${items.length} deals</span>
+    </div>
+    <div class="grid">${items.map(cardHtml).join("")}</div>`;
+  }
+  document.getElementById("dealCount").textContent=total+" deal"+(total!==1?"s":"");
+  return html||emptyHtml();
 }
 
-// ── Load all data once, then filter client-side ────────────────────────────
-async function loadAll() {
-  document.getElementById("grid").innerHTML =
+function emptyHtml(){
+  return `<div class="empty-state">
+    <h3>No deals found yet</h3>
+    <p>The fetcher runs daily at 6 AM. Check back then, or submit one using the form below.</p>
+  </div>`;
+}
+
+function renderDeals(){
+  const method=document.getElementById("sortSelect").value;
+  let filtered=filterDeals(allDeals).filter(passesPrice);
+
+  if(activeView==="amazon"){
+    const sorted=sortDeals(filtered,method);
+    document.getElementById("dealCount").textContent=
+      sorted.length+" deal"+(sorted.length!==1?"s":"");
+    document.getElementById("mainContent").innerHTML=sorted.length
+      ?`<div class="grid">${sorted.map(cardHtml).join("")}</div>`
+      :emptyHtml();
+  } else {
+    document.getElementById("mainContent").innerHTML=
+      renderAllDealsWithSections(filtered,method);
+  }
+}
+
+function updateCounts(deals){
+  const amazonDeals=deals.filter(d=>
+    !shouldSkip(d)&&(
+      (d.store||"")==="Amazon"||(d.source||"")==="amazon"||(d.url||"").includes("amazon.com")
+    )
+  );
+  const otherDeals=deals.filter(d=>
+    !shouldSkip(d)&&
+    !(d.store==="Amazon"||(d.source||"")==="amazon"||(d.url||"").includes("amazon.com"))
+  );
+  document.getElementById("cnt-amazon").textContent=amazonDeals.length;
+  document.getElementById("cnt-all").textContent=otherDeals.length;
+}
+
+async function loadAll(){
+  document.getElementById("mainContent").innerHTML=
     '<div class="state"><div class="spinner"></div></div>';
 
-  if (SUPABASE_URL === "YOUR_SUPABASE_URL") {
-    document.getElementById("grid").innerHTML = `<div class="state"><div class="err-box">
+  if(SUPABASE_URL==="YOUR_SUPABASE_URL"){
+    document.getElementById("mainContent").innerHTML=`<div class="state"><div class="err-box">
       <strong>⚠️ Supabase not connected</strong>
       <p>Replace <code>YOUR_SUPABASE_URL</code> and <code>YOUR_SUPABASE_ANON_KEY</code>
-      near the bottom of this file with your real values from Supabase → Project Settings → API.</p>
+      near the bottom of this file with your values from Supabase → Project Settings → API.</p>
     </div></div>`;
     return;
   }
 
-  const { data, error } = await sb.from("deals").select("*")
-    .order("posted_at", { ascending: false }).limit(600);
+  const{data,error}=await sb.from("deals").select("*")
+    .order("posted_at",{ascending:false}).limit(600);
 
-  document.getElementById("lastUpdated").textContent =
-    "Updated " + new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+  document.getElementById("lastUpdated").textContent=
+    "Updated "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
 
-  if (error) {
-    document.getElementById("grid").innerHTML = `<div class="state"><div class="err-box">
-      <strong>⚠️ Could not load deals</strong><p>${error.message}</p>
+  if(error){
+    document.getElementById("mainContent").innerHTML=`<div class="state"><div class="err-box">
+      <strong>⚠️ Could not load</strong><p>${error.message}</p>
     </div></div>`;
     return;
   }
 
-  allDeals = data || [];
+  allDeals=data||[];
   updateCounts(allDeals);
 
-  // Hot ticker — top 3 by hot_score across all clean deals
-  const hotOnes = sortDeals(
-    allDeals.filter(d => !shouldSkip(d) && (d.hot_score||0) > 0), "hot"
-  ).slice(0, 3);
-  const strip = document.getElementById("hotStrip");
-  if (hotOnes.length) {
-    document.getElementById("hotText").textContent =
-      hotOnes.map(d => (d.title||"").slice(0,55)).join("  ·  ");
+  // Hot ticker
+  const hot=sortDeals(allDeals.filter(d=>!shouldSkip(d)&&(d.hot_score||0)>0),"hot").slice(0,3);
+  const strip=document.getElementById("hotStrip");
+  if(hot.length){
+    document.getElementById("hotText").textContent=hot.map(d=>(d.title||"").slice(0,55)).join("  ·  ");
     strip.classList.add("on");
-  } else {
-    strip.classList.remove("on");
-  }
+  } else strip.classList.remove("on");
 
   renderDeals();
 }
 
-// ── Submit a deal ──────────────────────────────────────────────────────────
-async function submitDeal() {
-  const title = document.getElementById("sTitle").value.trim();
-  const url   = document.getElementById("sUrl").value.trim();
-  const msg   = document.getElementById("subMsg");
-  if (!title || !url) { msg.textContent = "Title and link are required."; return; }
-  msg.textContent = "Submitting…";
-
-  const store = document.getElementById("sStore").value;
-  const { error } = await sb.from("deals").insert({
-    title, url,
-    description: document.getElementById("sDesc").value,
-    image_url:   document.getElementById("sImg").value || null,
-    store,
-    category:    "general",
-    source:      "submitted",
-    hot_score:   0,
-    is_approved: true,
-    posted_at:   new Date().toISOString(),
+async function submitDeal(){
+  const title=document.getElementById("sTitle").value.trim();
+  const url=document.getElementById("sUrl").value.trim();
+  const msg=document.getElementById("subMsg");
+  if(!title||!url){msg.textContent="Title and link are required.";return;}
+  msg.textContent="Submitting…";
+  const store=document.getElementById("sStore").value;
+  const finalUrl=store==="Amazon"?tagAmazon(url):url;
+  const{error}=await sb.from("deals").insert({
+    title,url:finalUrl,
+    description:document.getElementById("sDesc").value,
+    store,source:"submitted",
+    hot_score:0,is_approved:true,
+    posted_at:new Date().toISOString(),
   });
-
-  if (error) { msg.textContent = "Error: " + error.message; return; }
-  msg.textContent = "✓ Deal submitted — it's live!";
-  ["sTitle","sDesc","sUrl","sImg"].forEach(id => document.getElementById(id).value="");
+  if(error){msg.textContent="Error: "+error.message;return;}
+  msg.textContent="✓ Deal submitted — it's live!";
+  ["sTitle","sDesc","sUrl","sImg"].forEach(id=>document.getElementById(id).value="");
   await loadAll();
 }
 
-// ── Boot ───────────────────────────────────────────────────────────────────
+// Show Amazon banner on load
+document.getElementById("amazonBanner").classList.add("on");
 loadAll();
-setInterval(loadAll, 300000); // refresh display every 5 min
+setInterval(loadAll,300000);
 </script>
 </body>
 </html>
