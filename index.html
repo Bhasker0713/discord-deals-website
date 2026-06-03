@@ -307,7 +307,7 @@
 // ── CONFIG ──────────────────────────────────────────────────────────────────
 const SUPABASE_URL = "https://lfghsqbldpyodnenpbnu.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmZ2hzcWJsZHB5b2RuZW5wYm51Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NTIxMjIsImV4cCI6MjA5NTAyODEyMn0.xGrz9zs8R_b3GESuDfcAoG5P1IjxDphdAv6e0bx8NOQ";
-// ────────────────────────────────────────────────────────────────────────────
+//  ────────────────────────────────────────────────────────────────────────────
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const AMAZON_TAG = "dollarsaver25-20";
@@ -326,19 +326,30 @@ const CAT_KEYWORDS = {
 const SKIP = ["book","kindle","audible","novel","paperback","hardcover",
   "ebook","audiobook","manga","comic","textbook"];
 
-// Free shipping patterns — don't badge as free
-const SHIP_PAT = [/free\s+(shipping|s&h|delivery|ship|returns)/i,/ships?\s+free/i];
-const FREE_PAT = [/\bfree\s+after\s+rebate/i,/100%\s*off/i,/\$0\.00/,
-  /\bfree\s+(item|product|sample|gift)\b/i,/\bfree\s+with\s+purchase/i];
-
-function isTrulyFree(t=""){
-  if(FREE_PAT.some(p=>p.test(t))) return true;
-  if(SHIP_PAT.some(p=>p.test(t))) return false;
-  return false;
+// ── FREE deal detection ────────────────────────────────────────────────────
+// STRICT RULE: Only show FREE badge if the database price field = "FREE"
+// We do NOT guess from the title — that caused false positives.
+// The fetcher only sets price="FREE" for confirmed free items (after rebate,
+// free sample, $0.00, 100% off etc.)
+function isTrulyFree(d) {
+  return (d.price || "").toString().toUpperCase() === "FREE";
 }
-function isShipOnly(t=""){
-  return SHIP_PAT.some(p=>p.test(t)) &&
-    !/\d+%\s*off|\$\d+\s*off|save\s+\$/i.test(t) && !isTrulyFree(t);
+
+// ── Hide deals that are ONLY about free shipping (no real discount) ────────
+// These are not deals — they're just normal orders with free shipping.
+const SHIP_ONLY_PAT = [
+  /\bfree\s+(shipping|s&h|s\/h|delivery|ship|returns|pickup)\b/i,
+  /\bships?\s+free\b/i,
+  /\bfree\s+2[-–]day\b/i,
+  /\bfree\s+next[-–]day\b/i,
+];
+const HAS_REAL_DISCOUNT = /\d+%\s*off|\$\d+\s*off|save\s+\$|was\s+\$|now\s+\$/i;
+
+function isShipOnly(title="") {
+  const hasShipping = SHIP_ONLY_PAT.some(p => p.test(title));
+  if (!hasShipping) return false;
+  // If it ALSO has a real discount, it's worth showing (just not as "free")
+  return !HAS_REAL_DISCOUNT.test(title);
 }
 
 // Ensure all Amazon URLs have affiliate tag
@@ -376,7 +387,8 @@ function setCat(btn){
 }
 
 function shouldSkip(d){
-  return SKIP.some(w=>(d.title||"").toLowerCase().includes(w))||isShipOnly(d.title||"");
+  const t=d.title||"";
+  return SKIP.some(w=>t.toLowerCase().includes(w)) || isShipOnly(t);
 }
 
 function getCategory(d){
@@ -443,7 +455,7 @@ function cardHtml(d){
   const isAmazon=(d.store==="Amazon"||(d.url||"").includes("amazon.com"));
   const url=isAmazon?tagAmazon(d.url||""):(d.url||"#");
   const store=d.store||"Other";
-  const free=isTrulyFree(d.title||"");
+  const free=isTrulyFree(d);          // checks d.price === "FREE" only
   const pct=discNum(d);
   const isHot=!free&&(d.hot_score||0)>=40;
 
